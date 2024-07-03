@@ -11,12 +11,12 @@ const authtenticator = (req, res, next) => {
     jwt.verify(token, process.env.JWT_SECRET, (error, user) => {
       if (error) return res.status(403);
       req.user = user
-      next();
     });
   } catch (error) {
     console.error(' error occured during the authenication of the token in authenticator.js : ',error)
   }
-
+  
+  next();
 };
 
 module.exports = authtenticator;

@@ -8,7 +8,10 @@ module.exports = {
     extend: {
       width: {
         'w-serverNav': '75px',
-        'w-chatList': '384px',
+        'w-chatList': '300px',
+      },
+      height:{
+        'dmHeight' : '610px'
       }
     },
   },

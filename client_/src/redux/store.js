@@ -1,9 +1,10 @@
 import {configureStore} from '@reduxjs/toolkit';
-import serverReducer from './reducer/something';
-
+import serverReducer from './reducer/serverReducer';
+import userReducer from './reducer/userReducer';
 
 export const store = configureStore({
     reducer: {
-        serverList:serverReducer
+        serverList:serverReducer,
+        user : userReducer
     }
 })

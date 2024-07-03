@@ -17,3 +17,7 @@ const messageSchema = new mongoose.Schema({
         Date: Date.now(),
       }
 })
+
+const Message = mogoose.model('messages', messageSchema);
+
+module.exports = Chat; 

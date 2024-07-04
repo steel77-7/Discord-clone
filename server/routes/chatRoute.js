@@ -6,7 +6,7 @@ const authtenticator = require('../middlewares/authenticator');
 const Chat = require('../modals/chatModel');
 
 
-router.post('/dmList',authtenticator, async (req,res)=>{   
+router.get('/dmList',authtenticator, async (req,res)=>{   
     const user = req.body;
 
     try {
@@ -26,10 +26,7 @@ router.post('/dmList',authtenticator, async (req,res)=>{
 
 router.post("/createDm", authtenticator, async (req, res) => {
     try {
-  
-  
       const { username, members } = req.body;
-      
       let finalMembers = [];
       if (members.length>2 ) {
         for (const member of members) {
@@ -52,13 +49,11 @@ router.post("/createDm", authtenticator, async (req, res) => {
           ////console.log("user is", user);
           finalMembers.push(user._id); // Store user ID
           finalMembers.push(req.user._id);
-          
         }
       }
       console.log('final members in  the outer dunction ',finalMembers);
       const chat = await Chat.create({
         members: finalMembers,
-        
         name:members.length>2?username:null,
       }).then(res=>{console.log(res)}).catch(e=>console.log(e));
      

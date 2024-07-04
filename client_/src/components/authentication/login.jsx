@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
+import { setUser, logoutUser } from '../../redux/reducer/userReducer';
+
 function Login() {
+  const user = useSelector((state)=>state.user);
+ 
+  const userDispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate()
@@ -12,6 +18,7 @@ function Login() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization : `Bearer ${localStorage.getItem('authtoken')}`
         },
         body: JSON.stringify({ email, password }),
       });
@@ -22,10 +29,15 @@ function Login() {
         // Handle successful login (e.g., redirect to another page or save token)
         console.log("Login successful", data);
         localStorage.setItem('authtoken', data.authtoken);
+       
+        userDispatch(setUser(data.userObject))
+        console.log("user is : " ,user )
         navigate('/app');
       } else {
-        // Handle errors (e.g., display error message)
+        
         console.log("Login failed", data);
+
+         await alert(data.message|| 'Provided credential are wrong');
       }
       
     } catch (error) {

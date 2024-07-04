@@ -18,6 +18,6 @@ const messageSchema = new mongoose.Schema({
       }
 })
 
-const Message = mogoose.model('messages', messageSchema);
+const Message = mongoose.model('messages', messageSchema);
 
 module.exports = Chat; 

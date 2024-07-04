@@ -8,8 +8,8 @@ export const ServerNavbar = () => {
   return (
     <>
       <div className="flex flex-col  items-center bg-slate-800 h-full  w-w-serverNav ">
-        {serverList.map((server) => (
-          <ServerNavbarIcons server={server} />
+        {serverList.map((server,index) => (
+          <ServerNavbarIcons server={server} key={index}/>
         ))}
 
         <button

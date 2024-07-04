@@ -10,6 +10,10 @@ const chatSchema = new mongoose.Schema({
     name:{
         type:String
     },
+    isServerChat:{
+        type:Boolean,
+        default:false
+    },
     createdAt: {
         type: Date,
         Date: Date.now(),

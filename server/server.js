@@ -20,7 +20,7 @@ app.use(express.json());
 socketConnection(httpServer);
 
 app.use('/auth', require("./routes/authRoute.js"))
-app.use('/me', require("./routes/chatRoute.js"))
+app.use('/chat', require("./routes/chatRoute.js"))
 
 //listening in the specified port
 httpServer.listen(process.env.PORT,()=>{

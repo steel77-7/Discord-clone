@@ -1,11 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
-  _id: null,
-  name: null,
-  email: null,
-  createdAt: null,
-};
+const initialState = []
 
 /* const initialState = {
     value:1
@@ -15,13 +10,10 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUser: (state, action) => {
-      const { _id, name, email, createdAt } = action.payload;
-      console.log("payload : ", action,state)
-      state._id = _id;
-      state.name = name;
-      state.email = email;
-      state.createdAt = createdAt;
+    setDmlist: (state, action) => {
+     
+     
+      state.push(action.payload)
     }
     /* setUser: (state, action) => {
         state.value += 2;

@@ -1,8 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux';
+import { setUser, logoutUser } from '../../redux/reducer/userReducer';
 
 const Register = () => {
+
+  const user = useSelector((state)=>state.user);
+  const userDispatch = useDispatch()
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -17,7 +22,7 @@ const Register = () => {
     try {
       const send = await fetch(import.meta.env.VITE_SERVER_API +'/auth/register',{
         method:"POST",
-        headers: {
+        header: {
           'Content-Type' : 'application/json'
         },
         body:JSON.stringify({email,username,password,dob})
@@ -25,6 +30,9 @@ const Register = () => {
       if(send.ok){
         const data = await send.json();
         localStorage.setItem('authtoken', data.authtoken);
+        
+        userDispatch(setUser(data.userObject))
+        console.log("user is : " ,user )
         navigate('/app'); 
       }
       

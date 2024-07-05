@@ -1,27 +1,28 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { MessageComponent } from "./messagecomponent";
 import { useSelector } from "react-redux";
 export const ChatArea = () => {
   const currentChat = useSelector(state=>state.currentChat)
+  const [messages,setMessages] = useState()
   useEffect(()=>{
-    //fetchMessages();
+    fetchMessages();
     console.log('currentchat',currentChat)
   },[currentChat])
   const fetchMessages = async () => {
     try {
       
-      const response = await fetch(`${import.meta.env.VITE_SERVER_API}chat/fetchMessage`, {
+      const response = await fetch(import.meta.env.VITE_SERVER_API+'/message/fetchMessage', {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          Authorization: `Bearer ${localStorage.getItem("authtoken")}`,
           Chat: `${JSON.stringify(currentChat)}`,
         },
       });
 
       //console.log("Messages fetched");
       const data = await response.json();
-      console.log("data.messages", data.messages);
+      console.log("data.messages", data);
 
       setMessages(data.messages);
     } catch (error) {

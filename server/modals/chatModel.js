@@ -9,7 +9,7 @@ const chatSchema = new mongoose.Schema({
     ],
     name:{
         type:String,
-        unique: true
+        
     },
     isServerChat:{
         type:Boolean,

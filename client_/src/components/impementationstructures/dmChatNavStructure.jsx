@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
+import { setCurrentChat } from "../../redux/reducer/currentChatReducer";
 const url = import.meta.env.VITE_SERVER_API;
 
 export const DmChatNav = () => {
@@ -22,8 +22,9 @@ export const DmChatNav = () => {
 
         if (response.ok) {
           const data = await response.json();
-          console.log(data)
-          setDmList(prevdata => [...prevdata,data]);
+          console.log('data',data.chat)
+          //setDmList(prevdata => [...prevdata,data.chat]);
+          setDmList(data.chat)
           
         }
       } catch (error) {
@@ -73,6 +74,8 @@ const ChatNavRoutes = () => {
 };
 
 const DirectMessages = ({ user, setAddDmPress, addDmPress, dmList }) => {
+  const currentChat = useSelector(state=>state.currentChat)
+  const dispatch=useDispatch()
   return (
     <div className="flex flex-col text-slate-300">
       <div className="flex justify-between flex-1 p-3">
@@ -87,9 +90,12 @@ const DirectMessages = ({ user, setAddDmPress, addDmPress, dmList }) => {
 
       <div className="flex flex-col gap-3 h-dmHeight overflow-y-auto overflow dm-scroll">
         {dmList.length > 0 ? (
-          dmList.map((contact, index) => (
-            <SingleDirectMessageComponent key={index} contact={contact} />
-          ))
+          dmList.map((contacts, index) => {
+            console.log('fmlsit length',dmList.length)
+            const filteredMembers= contacts.members.filter((member=>member._id!==user._id))
+            console.log('contact:',contacts)
+            return <button onClick={()=>setCurrentChat(contacts)}><SingleDirectMessageComponent key={index} contact={filteredMembers} user={user}/></button>
+          })
         ) : (
           <p>No direct messages found.</p>
         )}
@@ -98,15 +104,21 @@ const DirectMessages = ({ user, setAddDmPress, addDmPress, dmList }) => {
   );
 };
 
-const SingleDirectMessageComponent = ({ contact }) => {
+const SingleDirectMessageComponent = ({ user,contact }) => {
+  console.log("contact in single message",contact)
   return (
-    <div className="flex flex-1 justify-around p-2 hover:bg-slate-400 m-1 rounded-md">
+    <div className="flex   justify-around p-2 hover:bg-slate-400 m-1 rounded-md">
       <img
         src=""
         alt="loading"
         className="flex h-11 w-11 rounded-full bg-slate-50"
       />
-      {contact.name}
+      {/* {contact.name||contact.map(member=>{
+        console.log(member)
+        if(user._id!==member._id) return member.name
+        if(contact[0].name!==null) return contact.name
+      })} */}
+      {contact.name||contact[0].name}
     </div>
   );
 };
@@ -115,27 +127,28 @@ const AddDmComponent = ({ setAddDmPress, addDmPress,user }) => {
   const [allList, setAllList] = useState([]);
   const [name,setName] = useState('');
   const [dmId,setDmId] = useState([]);
-  useEffect(() => {
-    const fetchAllMembers = async () => {
-      try {
-        const response = await fetch(url + "/chat/allList", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("authtoken")}`,
-          },
-        });
 
-        if (response.ok) {
-          const data = await response.json();
-          setAllList(data);
-                }
-      } catch (error) {
-        console.log(error);
+  useEffect(() => {
+  const fetchAllMembers = async () => {
+    try {
+      const response = await fetch(url + "/chat/allList", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("authtoken")}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setAllList(data);
       }
-    };
-    fetchAllMembers();
-  }, []);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  fetchAllMembers();
+}, []);
   
 
   const handleCreateDm = async() => {

@@ -9,7 +9,7 @@ router.get("/dmList", authtenticator, async (req, res) => {
   const user = req.user;
 
   try {
-    const chat = await Chat.find({ members: user._id }).populate(
+    const chat = await Chat.find({ members: user }).populate(
       "members",
       "-password"
     );

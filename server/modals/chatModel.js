@@ -8,7 +8,8 @@ const chatSchema = new mongoose.Schema({
         }
     ],
     name:{
-        type:String
+        type:String,
+        unique: true
     },
     isServerChat:{
         type:Boolean,
@@ -18,7 +19,7 @@ const chatSchema = new mongoose.Schema({
         type: Date,
         Date: Date.now(),
       }
-
+      
 }
 )
 const Chat = mongoose.model('chat', chatSchema);

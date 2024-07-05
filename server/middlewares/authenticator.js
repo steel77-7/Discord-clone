@@ -1,23 +1,34 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
-const authtenticator = (req, res, next) => {
-  
+const authenticator = async (req, res, next) => {
+  console.log("authenticator initiated");
   try {
     const token = req.headers.authorization.split(" ")[1];
-    if(!token ) return res.status(401);
-    //something to be sent to the front end 
+    if (!token) return res.status(401);
+    //something to be sent to the front end
     //more efficient than validation is true/false
-    if(token===null ) return res.send({});
-    jwt.verify(token, process.env.JWT_SECRET, (error, user) => {
-      if (error) return res.status(403);
-      req.user = user
+    if (token === null) return req.user = null
+     jwt.verify(token, process.env.JWT_SECRET, (error, user) => {
+      if (error) {
+        console.log(error)
+        return res.send({error:"invalid token", valid:false})
+      }
+      req.user = user;
+      next();
     });
+    
+    
   } catch (error) {
-    console.error(' error occured during the authenication of the token in authenticator.js : ',error)
+    console.error(
+      " error occured during the authenication of the token in authenticator.js : ",
+      error
+    );
   }
   
-  next();
 };
 
-module.exports = authtenticator;
+module.exports = authenticator;
+
+
+

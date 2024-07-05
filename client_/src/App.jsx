@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -12,22 +12,35 @@ function App() {
   const navigate = useNavigate();
   const user = useSelector(state=>state.user)
   const dispatch = useDispatch()
+
+  useEffect(()=>{
+    checkUser();
+  },[user])
   const checkUser = async ()=>{
-    if(localStorage.getItem('authtoken')===null) return navigate('/login');
-    const response = await fetch(import.meta.env.VITE_SERVER_API+'/protected',{
-      method:'POST',
-      headers:{
-        'Content-Type' : 'application/json',
-        'Authorization' : `Bearer ${localStorage.getItem('authtoken')}`
+    console.log('checkUser initiated' )
+    try {
+      if(localStorage.getItem('authtoken')===null) return navigate('/login');
+      const response = await fetch(import.meta.env.VITE_SERVER_API+'/auth/protected',{
+        method:'POST',
+        headers:{
+          'Content-Type' : 'application/json',
+          'Authorization' : `Bearer ${localStorage.getItem('authtoken')}`
+        }
+      })
+      if(response.ok){
+        const data = await response.json();
+        
+        if(!data.valid) {
+          alert('Please login again')
+          return navigate('/login');
+        }
+        else if(data.valid){
+          dispatch(setUser(data.userObject));
+        }
       }
-    })
-    if(response.ok){
-      const data = response.json();
-      if(!data.valid) {
-        alert('Please login again')
-        return navigate('/login');
-      }
-      dispatch(setUser(data.userObject));
+      
+    } catch (error) {
+      console.log(error)
     }
   }
   return(
@@ -37,6 +50,6 @@ function App() {
     </>
   )
   }
-export default App
+export default App;
 
 

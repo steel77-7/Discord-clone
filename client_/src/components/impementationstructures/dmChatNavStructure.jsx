@@ -94,7 +94,7 @@ const DirectMessages = ({ user, setAddDmPress, addDmPress, dmList }) => {
             console.log('fmlsit length',dmList.length)
             const filteredMembers= contacts.members.filter((member=>member._id!==user._id))
             console.log('contact:',contacts)
-            return <button onClick={()=>setCurrentChat(contacts)}><SingleDirectMessageComponent key={index} contact={filteredMembers} user={user}/></button>
+            return <button onClick={()=>dispatch(setCurrentChat(contacts))}><SingleDirectMessageComponent key={index} contact={filteredMembers} user={user}/></button>
           })
         ) : (
           <p>No direct messages found.</p>

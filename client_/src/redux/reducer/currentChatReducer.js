@@ -12,8 +12,16 @@ export const currentChatSlice = createSlice({
   name: "currentChat",
   initialState,
   reducers: {
-    setCurretnChat: (state, action) => {
+    /* setCurrentChat: (state, action) => {
+      console.log(action.payload)
       state = action.payload;
+    } */ setCurrentChat: (state, action) => {
+      const { _id, members, isServerChat, name, createdAt } = action.payload;
+      state._id = _id;
+      state.members = members;
+      state.isServerChat = isServerChat;
+      state.name = name;
+      state.createdAt = createdAt;
     },
   },
 });

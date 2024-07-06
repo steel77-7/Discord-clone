@@ -18,7 +18,7 @@ router.get("/dmList", authtenticator, async (req, res) => {
         .status(400)
         .json({ error: { message: "no chats to be shown" } });
     } else if (chat) {
-      console.log(chat);
+      //console.log(chat);
       return res.status(200).json({ chat });
     }
   } catch (error) {
@@ -79,7 +79,7 @@ router.get("/allList", authtenticator, async (req, res) => {
         .status(400)
         .json({ error: { message: "no chats to be shown" } });
     } else if (users) {
-      console.log(users);
+      //console.log(users);
       return res.status(200).json({ users });
     }
   } catch (error) {

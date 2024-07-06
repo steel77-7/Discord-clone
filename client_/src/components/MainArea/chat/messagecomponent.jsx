@@ -1,21 +1,21 @@
 import React from "react";
 
-export const MessageComponent = () => {
+export const MessageComponent = ({message}) => {
   return (
     <>
-      <div className="flex gap-4  p-3 text-gray-300 hover:bg-slate-700 group">
+      {message&&<div className="flex gap-4  p-3 text-gray-300 hover:bg-slate-700 group">
         <div className="flex gap-4">
           <img src="" alt="" className="flex h-12 w-12 bg-white rounded-full" />
           <div className="flex flex-col">
-            <b>user</b>
-            <p>helloiubobob</p>
+            <b>{message.sender.name}</b>
+            <p>{message.message}</p>
           </div>
         </div>
         {/* <div className="group-hover:scale-0">
 
         <MessageMenu/>
         </div> */}
-      </div>
+      </div>}
     </>
   );
 };

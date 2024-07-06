@@ -11,7 +11,7 @@ router.get("/fetchMessage", authenticator, async (req, res) => {
     try {
       
       
-      const currchat = JSON.parse(req.headers.chat);
+      const currchat = req.headers.chat;
       const chat = await Chat.findOne({ _id:currchat._id });
       const messages = await Message.find({ chat: chat }).populate('sender');
       if (messages) {
@@ -26,5 +26,48 @@ router.get("/fetchMessage", authenticator, async (req, res) => {
       res.send({ message: "an internal server error occured " + e });
     }
   });
+
+  router.post("/saveMessage", authenticator, async (req, res) => {
+    try {
+      const { message, sender, chat } = req.body;
+      const newMessage = await Message.create({
+        sender: sender,
+        chat: chat,
+        message: message,
+      });
+      if (newMessage) {
+        res.status(200).json({ message: "message saved" });
+      } else {
+        res.status(200).json({ message: "database error" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "database error" + error });
+    }
+  });
+
+  router.post('/editMessage',authenticator, async (req,res)=>{
+    try {
+      const {message}= req.body;
+      console.log(message)
+      const result = await Message.findOneAndUpdate({_id:message._id},{$set:{message:message.message}})
+      console.log('Message update results :',result)
+      res.send({message:'message updated '})
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message:'message not updated'});
+    }
+  })
+  router.post('/deleteMessage',authenticator, async (req,res)=>{
+    try {
+      const {message}= req.body;
+      console.log('message is :',message)
+      const result = await Message.findByIdAndDelete(message._id);
+      console.log('Message deletion results :',result)
+      res.send({message:'message deleted '})
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message:'message not deleted'});
+    }
+  })
 
   module.exports = router; 

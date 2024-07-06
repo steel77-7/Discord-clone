@@ -10,9 +10,9 @@ const User = require("../modals/user");
 router.post("/register", async (req, res) => {
   try {
     const { email, password, username } = req.body;
-
+    console.log(email, password, username )
     //salting and hashing password
-    const salt = bcrypt.genSaltSync(10);
+    const salt = await bcrypt.genSaltSync(10);
     const secPass = await bcrypt.hash(password, salt);
 
     //*******create user*******

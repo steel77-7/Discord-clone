@@ -45,7 +45,7 @@ const socketConnection = (httpServer) => {
 
     socket.on('send-message', (message) => {
       console.log('Received direct message:', message);
-      socket.to(message.chat).emit('recieve-message' ,(message));
+      socket.to(message.chat._id).emit('recieve-message' ,(message));
     });
 
     socket.on('disconnect', (reason) => {

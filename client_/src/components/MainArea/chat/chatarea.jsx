@@ -8,18 +8,28 @@ export const ChatArea = () => {
   const [messages,setMessages] = useState()
   const [newMessage,setNewMessage] = useState();
   const socket= getSocket()
-  useEffect(()=>{
-    socket.on('connection', ()=>{
-      console.log('socket connected', socket.id)
-    })
-    socket.on('recieve-message' , (message)=>{
-      setMessages(prev=>[...prev,message])
-    })
-  },[])
- 
+  useEffect(() => {
+    socket.on('connection', () => {
+      console.log('socket connected', socket.id);
+    });
+
+    // Ensure this listener is only added once
+    socket.on('recieve-message', (message) => {
+      setMessages(prev => [...prev, message]);
+    });
+
+    return () => {
+      socket.off('recieve-message',(message)=>{
+        console.log('not worth it',message)
+      }
+    ); // Clean up the listener on unmount
+    };
+  }, [socket]);
+  
   useEffect(()=>{
     fetchMessages();
-    console.log('currentchat',currentChat)
+    console.log('messages: ' ,messages)
+    socket.emit('join-room',currentChat._id)
   },[currentChat])
   const fetchMessages = async () => {
     try {
@@ -44,7 +54,7 @@ export const ChatArea = () => {
   };
 
   const handlePress = (e)=>{
-    if(e.key === "Enter")
+    if(e.key === "Enter" && e.target.value!==" " &&e.target.value!=="")
       handleSendMessage();
   }
   const handleSendMessage = async ()=>{
@@ -64,22 +74,26 @@ export const ChatArea = () => {
       const data = await response.json();
       console.log("data.messages", data);
       socket.emit('send-message', {message:newMessage , chat :currentChat, sender:user._id })
-      setMessages(data.messages);
+      const m ={message:newMessage , chat :currentChat, sender:user };
+      setMessages((prev)=>[...prev,m]);
+      
       setNewMessage('')
     } catch (error) {
       console.error(error);
     }
 
   }
+
   return (
     <>
       <div className="flex flex-col bg-gray-600  w-full  h-full ">
         <div className="flex-1">
           {currentChat._id?<MessageNav currentChat={currentChat} user={user} />:<ChatAreaNav curretnChat={currentChat} user={user} />}
         </div>
-        <div className="flex gap-4 flex-col ">
-          {messages &&currentChat._id&& messages.map((message,index)=>{
-            <MessageComponent message={message} key={index}/>
+        <div className="flex gap-4 flex-col overflow-y-auto">
+          {messages&& messages.map((message,index)=>{
+            console.log('message : ',message)
+            return <MessageComponent message={message} key={index}/>
           })}
         </div>
         {currentChat._id&&<div className="flex">
@@ -119,13 +133,13 @@ const ChatAreaNav = ({currentChat}) => {
 };
 
 const MessageNav = ({currentChat,user})=>{
-  console.log('curretn chat in the message nav',currentChat)
+  
   return (
     <>
       <div className="flex justify-around  relative w-full h-10 chataeranav bg-slate-700 text-white">
         <ul className=" w-full flex gap-10 px-4">
           <li>{currentChat._id!==null&&(currentChat.name||currentChat.members.map(member=>{
-          console.log(member)
+          
             if(member._id!==user._id){
             return member.name
             }

@@ -18,11 +18,11 @@ const Register = () => {
   const handleSubmit = async(e) => {
     e.preventDefault();
     // Handle form submission
-    console.log({ email, username, password, dob });
+    console.log( email, username, password, dob );
     try {
       const send = await fetch(import.meta.env.VITE_SERVER_API +'/auth/register',{
         method:"POST",
-        header: {
+        headers: {
           'Content-Type' : 'application/json'
         },
         body:JSON.stringify({email,username,password,dob})

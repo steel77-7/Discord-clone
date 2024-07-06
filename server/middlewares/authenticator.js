@@ -2,7 +2,7 @@ require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
 const authenticator = async (req, res, next) => {
-  console.log("authenticator initiated");
+  
   try {
     const token = req.headers.authorization.split(" ")[1];
     if (!token) return res.status(401);

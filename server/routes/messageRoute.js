@@ -8,35 +8,31 @@ const authenticator = require("../middlewares/authenticator");
 const Message = require("../modals/messageModel");
 
 router.get("/fetchMessage", authenticator, async (req, res) => {
-    try {
-      
-      
-      const currchat = req.headers.chat;
-      const chat = await Chat.findOne({ _id:currchat._id });
-      const messages = await Message.find({ chat: chat }).populate('sender');
-      if (messages) {
-        //console.log('messages : ',message)
-        res.status(200).json({ messages });
-      } else {
-        //console.log('no messages found');
-        res.status(401).json({ messages: null });
-      }
-    } catch (e) {
-      //console.log("server error in the fetch chat",e);
-      res.send({ message: "an internal server error occured " + e });
+  try {
+    const currchat = JSON.parse(req.headers.chat);
+    const chat = await Chat.findOne({ _id: currchat._id });
+    const messages = await Message.find({ chat: chat._id }).populate("sender");
+    if (messages.length > 0) {
+      res.status(200).json({ messages });
+    } else {
+      res.status(200).json({ messages: [] });
     }
-  });
+  } catch (e) {
+    res.status(500).send({ message: "An internal server error occurred " + e });
+  }
+});
 
   router.post("/saveMessage", authenticator, async (req, res) => {
     try {
+        console.log('save message intited')
       const { message, sender, chat } = req.body;
       const newMessage = await Message.create({
         sender: sender,
-        chat: chat,
+        chat: chat._id,
         message: message,
       });
       if (newMessage) {
-        consoel.log(newMessage)
+        console.log(newMessage)
         res.status(200).json({ message: "message saved" });
       } else {
         res.status(200).json({ message: "database error" });

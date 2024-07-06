@@ -8,7 +8,10 @@ export const MessageComponent = ({message}) => {
         <div className="flex gap-4">
           <img src="" alt="" className="flex h-12 w-12 bg-white rounded-full" />
           <div className="flex flex-col">
+            <div className="flex gap-4">
             <b>{message.sender.name}</b>
+            <p>{message.createdAt}</p>
+            </div>
             <p>{message.message}</p>
           </div>
         </div>

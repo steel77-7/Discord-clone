@@ -6,7 +6,7 @@ const app = express();
 const httpServer = createServer(app)
 const socketConnection = require('./socketServer');
 const db = require('./db.js')
-
+  
 
 app.use(cors({
     origin:"*",
@@ -16,8 +16,6 @@ app.use(express.json());
 
 
 
-//socket connection 
-socketConnection(httpServer);
 
 app.use('/auth', require("./routes/authRoute.js"))
 app.use('/chat', require("./routes/chatRoute.js"))
@@ -28,3 +26,6 @@ httpServer.listen(process.env.PORT,()=>{
 })
 //connection to mongodb
 db();
+
+//socket connection 
+socketConnection(httpServer);

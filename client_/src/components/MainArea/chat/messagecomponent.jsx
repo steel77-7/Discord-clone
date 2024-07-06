@@ -1,6 +1,7 @@
 import React from "react";
 
 export const MessageComponent = ({message}) => {
+  console.log("message is : " , message)
   return (
     <>
       {message&&<div className="flex gap-4  p-3 text-gray-300 hover:bg-slate-700 group">

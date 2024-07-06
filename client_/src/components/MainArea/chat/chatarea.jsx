@@ -1,11 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { MessageComponent } from "./messagecomponent";
 import { useSelector } from "react-redux";
+import getSocket from "../../../misc/getSocket";
 export const ChatArea = () => {
   const currentChat = useSelector(state=>state.currentChat)
   const user = useSelector(state=>state.user)
   const [messages,setMessages] = useState()
   const [newMessage,setNewMessage] = useState();
+  const socket= getSocket()
+  useEffect(()=>{
+    socket.on('connection', ()=>{
+      console.log('socket connected', socket.id)
+    })
+    socket.on('recieve-message' , (message)=>{
+      setMessages(prev=>[...prev,message])
+    })
+  },[])
+ 
   useEffect(()=>{
     fetchMessages();
     console.log('currentchat',currentChat)
@@ -32,7 +43,7 @@ export const ChatArea = () => {
     }
   };
 
-  const handlePress = ()=>{
+  const handlePress = (e)=>{
     if(e.key === "Enter")
       handleSendMessage();
   }
@@ -52,8 +63,9 @@ export const ChatArea = () => {
       //console.log("Messages fetched");
       const data = await response.json();
       console.log("data.messages", data);
-
+      socket.emit('send-message', {message:newMessage , chat :currentChat, sender:user._id })
       setMessages(data.messages);
+      setNewMessage('')
     } catch (error) {
       console.error(error);
     }
@@ -66,8 +78,8 @@ export const ChatArea = () => {
           {currentChat._id?<MessageNav currentChat={currentChat} user={user} />:<ChatAreaNav curretnChat={currentChat} user={user} />}
         </div>
         <div className="flex gap-4 flex-col ">
-          {messages &&currentChat._id&& messages.map(message=>{
-            <MessageComponent message={message}/>
+          {messages &&currentChat._id&& messages.map((message,index)=>{
+            <MessageComponent message={message} key={index}/>
           })}
         </div>
         {currentChat._id&&<div className="flex">

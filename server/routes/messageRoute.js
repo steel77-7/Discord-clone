@@ -36,6 +36,7 @@ router.get("/fetchMessage", authenticator, async (req, res) => {
         message: message,
       });
       if (newMessage) {
+        consoel.log(newMessage)
         res.status(200).json({ message: "message saved" });
       } else {
         res.status(200).json({ message: "database error" });

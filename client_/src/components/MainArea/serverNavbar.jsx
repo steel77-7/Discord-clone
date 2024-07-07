@@ -50,11 +50,11 @@ export const ServerNavbar = ({
 
         <button
           className="flex justify-center items-center text-white h-14 w-14 m-2 rounded-full bg-slate-400"
-          onClick={setServerCreationPress(!serverCreationPress)}
+          onClick={()=>setServerCreationPress(!serverCreationPress)}
         >
           +
         </button>
-        <ServerCreationForm />
+        {serverCreationPress&&<ServerCreationForm />}
       </div>
     </>
   );

@@ -3,9 +3,8 @@ const User = require("../modals/user");
 //const authtenticator = require("../middlewares/authenticator");
 const Chat = require("../modals/chatModel");
 
-
-exports.createChatController = async (req,res) => {
-const user = req.user;
+exports.createChatController = async (req, res) => {
+  const user = req.user;
   try {
     const { username, members, isServerChat } = req.body;
     console.log(req.body);
@@ -21,10 +20,17 @@ const user = req.user;
           finalMembers.push(req.user);
         }
       }
+    } else if (isServerChat) {
+      const chat = await Chat.create({
+        members: members,
+        name: members.length > 2 ? username : null,
+        isServerChat: true,
+      });
+      return chat;
     } else {
       const user = await User.findOne({ _id: members });
       if (user) {
-        ////console.log("user is", user);
+        
         finalMembers.push(user._id); // Store user ID
         finalMembers.push(req.user);
       }
@@ -40,16 +46,16 @@ const user = req.user;
       .catch((e) => console.log(e));
     console.log(chat);
 
-    res.status(200).json({ message: "contact created" });
+   return  res.status(200).json({ message: "contact created" });
   } catch (error) {
     res
-      .status(200)
+      .status(500)
       .json({ message: "error occured in creating contact", error: error });
   }
 };
 
-exports.dmList = async (req,res) => {
-    const user = req.user;
+exports.dmList = async (req, res) => {
+  const user = req.user;
 
   try {
     const chat = await Chat.find({ members: user }).populate(
@@ -68,22 +74,21 @@ exports.dmList = async (req,res) => {
     console.error(error);
     res.status(500).json({ error });
   }
-}
+};
 
-exports.allList = async(req,res)=>{
-    try {
-        const users = await User.find({});
-        if (!users) {
-          return res
-            .status(400)
-            .json({ error: { message: "no chats to be shown" } });
-        } else if (users) {
-          //console.log(users);
-          return res.status(200).json({ users });
-        }
-      } catch (error) {
-        console.error(error);
-        res.status(500).json({ error });
-      }
-}
-
+exports.allList = async (req, res) => {
+  try {
+    const users = await User.find({});
+    if (!users) {
+      return res
+        .status(400)
+        .json({ error: { message: "no chats to be shown" } });
+    } else if (users) {
+      //console.log(users);
+      return res.status(200).json({ users });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error });
+  }
+};

@@ -6,10 +6,60 @@ const User = require("../modals/user");
 const Chat = require("../modals/chatModel");
 const authenticator = require("../middlewares/authenticator");
 const Message = require("../modals/messageModel");
+const Server = require("../modals/serverModel");
 
-
-router.get('/serverList', authenticator,(req,res)=>{
-
+router.get("/serverList", authenticator, (req, res) => {
+  try {
+    const userId = req.user;
+    const serverList = Server.findOne({ members: userId });
+    console.log("list of servers is : ", serverList);
+    if (serverList) {
+      return res.status(200).json({ servers: serverList });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error });
+  }
 });
 
-module.exports = router
+//server creation
+router.post("/createServer", authenticator,async (req, res) => {
+  try {
+    const { serverName } = JSON.parse(req.body);
+    const userId = req.user;
+    let membersArray=[]
+    let chatsArray = [];
+    membersArray.push(userId);
+    const chatCreation = await fetch(process.env.SERVER_API+'/chat/createChat',{
+        method:'POST',
+        headers: {
+            "Content-Type": "application/json",
+            'Authorization': `Bearer ${req.headers.authorization.split(" ")[1]}`,
+          },
+          body:JSON.stringify({name:'general',isServerChat:true,members:membersArray})
+    })
+
+    //data recieved after chat creation 
+    let chatData;
+    if(chatCreation.ok){
+     chatData = chatCreation.json();
+     chatsArray.push(chatData._id)
+    }
+
+    //serevr is created here
+    const server = Server.create({
+      name: serverName,
+      members: membersArray,
+      chats: chatsArray,
+    });
+    console.log("server created : ", server);
+    if (serverList) {
+      return res.status(200).json({server});
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error });
+  }
+});
+
+module.exports = router;

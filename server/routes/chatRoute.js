@@ -27,12 +27,12 @@ router.get("/dmList", authtenticator, async (req, res) => {
   }
 });
 
-router.post("/createDm", authtenticator, async (req, res) => {
+router.post("/createChat", authtenticator, async (req, res) => {
   try {
-    const { username, members } = req.body;
+    const { username, members ,isServerChat} = req.body;
     console.log(req.body);
     let finalMembers = [];
-    if (members.length > 2) {
+    if (members.length > 2&&!isServerChat) {
       for (const member of members) {
         console.log("member:", member);
         const user = await User.findOne({ _id: member });
@@ -41,8 +41,7 @@ router.post("/createDm", authtenticator, async (req, res) => {
           //storing the id of the !current user
           finalMembers.push(user._id); // Store user ID
           finalMembers.push(req.user);
-        } else {
-        }
+        } 
       }
     } else {
       const user = await User.findOne({ _id: members });

@@ -159,7 +159,7 @@ const AddDmComponent = ({ setAddDmPress, addDmPress, user }) => {
   }, []);
 
   const handleCreateDm = async () => {
-    const response = await fetch(url + "/chat/createDm", {
+    const response = await fetch(url + "/chat/createChat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

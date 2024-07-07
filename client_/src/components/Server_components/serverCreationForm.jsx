@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { setServerInfo } from '../../redux/reducer/serverReducer';
 const ServerCreationForm = () => {
+    const serverInfo = useSelector(state=>state.serverInfo);
+    const serverDispatch = useDispatch()
   const [serverName, setServerName] = useState('');
   const [serverRegion, setServerRegion] = useState('us-west');
   const [serverIcon, setServerIcon] = useState(null);
@@ -18,14 +21,22 @@ const ServerCreationForm = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     // Handle form submission, e.g., send data to the backend
-    console.log({
-      serverName,
-      serverRegion,
-      serverIcon,
-    });
+    const response  =await fetch(import.meta.env.VITE_SERVER.API+'/guild/createServer',{
+        method:"POST",
+        headers:{
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("authtoken")}`,
+          },
+          body:JSON.stringify({serverName : serverName})
+    }) 
+
+    if(response.ok){
+        const data= response.json();
+        serverDispatch(setServerInfo(data.server))
+    }
   };
 
   return (
@@ -43,7 +54,7 @@ const ServerCreationForm = () => {
             required
           />
         </div>
-        
+
        {/*  <div>
           <label htmlFor="serverRegion" className="block text-sm font-medium">Server Region</label>
           <select

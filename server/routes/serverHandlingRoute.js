@@ -7,6 +7,7 @@ const Chat = require("../modals/chatModel");
 const authenticator = require("../middlewares/authenticator");
 const Message = require("../modals/messageModel");
 const Server = require("../modals/serverModel");
+const {createChat}= require('../controllers/chatController');
 
 router.get("/serverList", authenticator, (req, res) => {
   try {
@@ -30,14 +31,18 @@ router.post("/createServer", authenticator,async (req, res) => {
     let membersArray=[]
     let chatsArray = [];
     membersArray.push(userId);
-    const chatCreation = await fetch(process.env.SERVER_API+'/chat/createChat',{
+    /* const chatCreation = await fetch(process.env.SERVER_API+'/chat/createChat',{
         method:'POST',
         headers: {
             "Content-Type": "application/json",
             'Authorization': `Bearer ${req.headers.authorization.split(" ")[1]}`,
           },
           body:JSON.stringify({name:'general',isServerChat:true,members:membersArray})
-    })
+    }) */
+    req.body.name = 'general';
+    req.body.isServerChat = true;
+    req.body.members = membersArray; 
+    await createChat(req,res);
 
     //data recieved after chat creation 
     let chatData;

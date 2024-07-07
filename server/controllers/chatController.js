@@ -1,4 +1,11 @@
-const createChatController = async () => {
+const mongoose = require("mongoose");
+const User = require("../modals/user");
+//const authtenticator = require("../middlewares/authenticator");
+const Chat = require("../modals/chatModel");
+
+
+exports.createChatController = async (req,res) => {
+const user = req.user;
   try {
     const { username, members, isServerChat } = req.body;
     console.log(req.body);
@@ -40,3 +47,43 @@ const createChatController = async () => {
       .json({ message: "error occured in creating contact", error: error });
   }
 };
+
+exports.dmList = async (req,res) => {
+    const user = req.user;
+
+  try {
+    const chat = await Chat.find({ members: user }).populate(
+      "members",
+      "-password"
+    );
+    if (!chat) {
+      return res
+        .status(400)
+        .json({ error: { message: "no chats to be shown" } });
+    } else if (chat) {
+      //console.log(chat);
+      return res.status(200).json({ chat });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error });
+  }
+}
+
+exports.allList = async(req,res)=>{
+    try {
+        const users = await User.find({});
+        if (!users) {
+          return res
+            .status(400)
+            .json({ error: { message: "no chats to be shown" } });
+        } else if (users) {
+          //console.log(users);
+          return res.status(200).json({ users });
+        }
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error });
+      }
+}
+

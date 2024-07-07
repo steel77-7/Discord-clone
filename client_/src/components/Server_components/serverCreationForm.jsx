@@ -24,7 +24,7 @@ const ServerCreationForm = () => {
   const handleSubmit = async(e) => {
     e.preventDefault();
     // Handle form submission, e.g., send data to the backend
-    const response  =await fetch(import.meta.env.VITE_SERVER.API+'/guild/createServer',{
+    const response  =await fetch(import.meta.env.VITE_SERVER_API+'/guild/createServer',{
         method:"POST",
         headers:{
             "Content-Type": "application/json",

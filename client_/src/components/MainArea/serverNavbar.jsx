@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setServerInfo } from "../../redux/reducer/serverReducer";
 import ServerCreationForm from "../Server_components/serverCreationForm";
@@ -12,6 +12,9 @@ export const ServerNavbar = ({
   const serverInfo = useSelector((state) => state.serverList);
   const serverDispatch = useDispatch();
 
+  useEffect(()=>{
+    fetchServerList();
+  },[])
   const fetchServerList = async () => {
     try {
       const response = await fetch(
@@ -28,11 +31,11 @@ export const ServerNavbar = ({
 
       if (response.ok) {
         const data = response.json();
-        console.log(data)
+        console.log(data);
         setServerList((prev) => [...prev, data.servers]);
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   };
 
@@ -40,9 +43,10 @@ export const ServerNavbar = ({
     <>
       <div className="flex flex-col  items-center bg-slate-800 h-full  w-w-serverNav ">
         {serverList.length > 0 &&
-          serverList.map((server, index) => (
-            <ServerNavbarIcons server={server} key={index} />
-          ))}
+          serverList.map((server, index) => {
+            
+            return <button onClick={()=>serverDispatch(setServerInfo(server))}><ServerNavbarIcons server={server} key={index} /></button>
+          })}
 
         <button
           className="flex justify-center items-center text-white h-14 w-14 m-2 rounded-full bg-slate-400"
@@ -50,7 +54,7 @@ export const ServerNavbar = ({
         >
           +
         </button>
-      <ServerCreationForm/>
+        <ServerCreationForm />
       </div>
     </>
   );

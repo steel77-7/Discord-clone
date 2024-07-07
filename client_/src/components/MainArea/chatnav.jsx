@@ -1,12 +1,14 @@
 import React from "react";
 import { DmChatNav } from "../impementationstructures/dmChatNavStructure";
 import { useSelector, useDispatch } from "react-redux";
+import { ServerChatNavStructure } from "../impementationstructures/serverChatNavStructure";
 export const ChatNav = () => {
   const user = useSelector((state) => state.user);
+  const server = useSelector(state=>state.serverInfo)
   return (
     <>
       <div className="flex flex-col">
-        <DmChatNav />
+        {server._id!==null?<ServerChatNavStructure/>:<DmChatNav />}
         <UserComponent user={user} />
       </div>
     </>

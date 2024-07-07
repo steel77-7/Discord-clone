@@ -5,7 +5,7 @@ import currentChatReducer from './reducer/currentChatReducer';
 
 export const store = configureStore({
     reducer: {
-        serverList:serverReducer,
+        serverInfo:serverReducer,
         user : userReducer,
         currentChat  : currentChatReducer
     }

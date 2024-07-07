@@ -1,28 +1,33 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
-
-const initialState = [
-  {
-    name:'steel',
-    status:'muted',
-  }
-];
+const initialState = {
+  _id: null,
+  name: null,
+  chats: [],
+  members: [],
+};
 
 export const serverSlice = createSlice({
-  name: 'serverList',
+  name: "serverInfo",
   initialState,
   reducers: {
-    increment: (state, action) => {
-      state.push(action.payload);
+    setServerInfo: (state, action) => {
+      const { _id, name, chats, members } = action.payload;
+      state._id = _id;
+      state.name = name;
+      state.chats = chats;
+      state.members = members;
     },
-    decrement: (state) => {
-      state.pop();
-    }
-  }
+    resetServerInfo: (state) => {
+      state._id = null;
+      state.name = null;
+      state.chats = [];
+      state.members = [];
+    },
+  },
 });
 
 // Action creators are generated for each case reducer function
-export const { increment, decrement} = serverSlice.actions
+export const { setServerInfo,resetServerInfo} = serverSlice.actions;
 
 export default serverSlice.reducer;
-

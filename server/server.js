@@ -20,6 +20,7 @@ app.use(express.json());
 app.use('/auth', require("./routes/authRoute.js"))
 app.use('/chat', require("./routes/chatRoute.js"))
 app.use('/message', require("./routes/messageRoute.js"))
+app.use('/guild', require("./routes/serverHandlingRoute.js"))
 //listening in the specified port
 httpServer.listen(process.env.PORT,()=>{
     console.log('Server is running on port ',process.env.PORT);

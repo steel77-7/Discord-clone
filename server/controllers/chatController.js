@@ -23,7 +23,7 @@ exports.createChatController = async (req, res) => {
     } else if (isServerChat) {
       const chat = await Chat.create({
         members: members,
-        name: members.length > 2 ? username : null,
+        name: req.body.name,
         isServerChat: true,
       });
       return chat;

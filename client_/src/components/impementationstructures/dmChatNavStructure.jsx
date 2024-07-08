@@ -72,6 +72,7 @@ const ChatNavRoutes = () => {
 };
 
 const DirectMessages = ({ user, setAddDmPress, addDmPress, dmList }) => {
+  console.log(dmList)
   const currentChat = useSelector((state) => state.currentChat);
   const dispatch = useDispatch();
   return (
@@ -90,9 +91,12 @@ const DirectMessages = ({ user, setAddDmPress, addDmPress, dmList }) => {
         {dmList.length > 0 ? (
           dmList.map((contacts, index) => {
             
-            const filteredMembers = contacts.members.filter(
-              (member) => member._id !== user._id
+            let filteredMembers
+            if(!contacts.isServerChat){
+            filteredMembers = contacts.members.filter(
+              (member) => member._id !== user._id 
             );
+          }
            
             return (
               <button onClick={() => dispatch(setCurrentChat(contacts))}>
@@ -114,6 +118,7 @@ const DirectMessages = ({ user, setAddDmPress, addDmPress, dmList }) => {
 
 const SingleDirectMessageComponent = ({ user, contact }) => {
   
+  if(!contact) return null
   return (
     <div className="flex   justify-around p-2 hover:bg-slate-400 m-1 rounded-md">
       <img
@@ -126,7 +131,7 @@ const SingleDirectMessageComponent = ({ user, contact }) => {
         if(user._id!==member._id) return member.name
         if(contact[0].name!==null) return contact.name
       })} */}
-      {contact.name || contact[0].name}
+      {contact.name || contact[0]?.name}
     </div>
   );
 };

@@ -48,7 +48,7 @@ router.post("/createServer", authenticator,async (req, res) => {
     //data recieved after chat creation 
     let chatData;
     if(chatCreation._id){
-     chatData = chatCreation.json();
+     chatData = chatCreation
      chatsArray.push(chatData._id)
     }
 

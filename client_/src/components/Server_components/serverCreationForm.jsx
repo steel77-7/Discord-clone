@@ -34,8 +34,8 @@ const ServerCreationForm = ({setServerCreationPress}) => {
     }) 
 
     if(response.ok){
-        const data= response.json();
-        
+        const data= await response.json();
+        console.log("data for serv creation is",data)
         serverDispatch(setServerInfo(data.server))
         setServerCreationPress(false)
     }

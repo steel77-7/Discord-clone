@@ -3,7 +3,6 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   _id: null,
   name: null,
-  chats: [],
   members: [],
   invites:[]
 };
@@ -13,18 +12,18 @@ export const serverSlice = createSlice({
   initialState,
   reducers: {
     setServerInfo: (state, action) => {
-      const { _id, name, chats, members ,invites} = action.payload;
+      console.log(action)
+      const { _id, name, members ,invites} = action.payload;
       state._id = _id;
       state.name = name;
-      state.chats = chats;
       state.members = members;
       state.invites = invites
     },
     resetServerInfo: (state) => {
       state._id = null;
       state.name = null;
-      state.chats = [];
       state.members = [];
+      state.invites = [];
     },
   },
 });

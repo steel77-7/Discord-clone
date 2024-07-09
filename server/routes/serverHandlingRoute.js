@@ -43,7 +43,9 @@ router.post("/createServer", authenticator, async (req, res) => {
       req.body.isServerChat = true;
       req.body.members = membersArray;
       req.body.serverid = server._id;
-      await createChatController(req,res);
+      await createChatController(req);
+      
+      console.log('returned',server)
       return res.status(200).json({ server });
     }
   } catch (error) {

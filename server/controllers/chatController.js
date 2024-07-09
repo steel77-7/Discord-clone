@@ -29,7 +29,7 @@ exports.createChatController = async (req, res) => {
         server:req.body.serverid
       });
       console.log('serverchat : ',chat)
-      return ;
+      return console.log('returning');
     } else {
       const user = await User.findOne({ _id: members });
       if (user) {

@@ -18,6 +18,10 @@ const chatSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         Date: Date.now(),
+      },
+      server :{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'server'
       }
       
 }

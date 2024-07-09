@@ -21,12 +21,15 @@ exports.createChatController = async (req, res) => {
         }
       }
     } else if (isServerChat) {
+      console.log('SEERVERRRRR CHAT IS TRUEEEE')
       const chat = await Chat.create({
         members: members,
         name: req.body.name,
         isServerChat: true,
+        server:req.body.serverid
       });
-      return chat;
+      console.log('serverchat : ',chat)
+      return ;
     } else {
       const user = await User.findOne({ _id: members });
       if (user) {
@@ -51,6 +54,7 @@ exports.createChatController = async (req, res) => {
     res
       .status(500)
       .json({ message: "error occured in creating contact", error: error });
+      console.error(error);
   }
 };
 

@@ -23,16 +23,15 @@ export const ServerNavbar = ({
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("authtoken")}`,
-            Chat: `${JSON.stringify(currentChat)}`,
+            Authorization: `Bearer ${localStorage.getItem("authtoken")}`
           },
         }
       );
 
       if (response.ok) {
-        const data = response.json();
-        console.log(data);
-        setServerList((prev) => [...prev, data.servers]);
+        const data = await response.json();
+        console.log('serevr list', data);
+        setServerList(data.servers);
       }
     } catch (error) {
       console.error(error);
@@ -45,7 +44,7 @@ export const ServerNavbar = ({
         {serverList.length > 0 &&
           serverList.map((server, index) => {
             
-            return <button onClick={()=>serverDispatch(setServerInfo(server))}><ServerNavbarIcons server={server} key={index} /></button>
+            return <button onClick={()=>serverDispatch(setServerInfo(server))}><ServerNavbarIcons server={server} key={index} serverDispatch={serverDispatch} /></button>
           })}
 
         <button
@@ -54,19 +53,23 @@ export const ServerNavbar = ({
         >
           +
         </button>
-        {serverCreationPress&&<ServerCreationForm />}
+        {serverCreationPress&&<ServerCreationForm setServerCreationPress={setServerCreationPress}/>}
       </div>
     </>
   );
 };
 
-const ServerNavbarIcons = ({ server }) => {
+const ServerNavbarIcons = ({ server,serverDispatch }) => {
+ 
   return (
-    <>
-      <div className="flex transition-all ease-in-out ">
-        <button className="flex bg-white h-14 w-14 rounded-full transition-all hover:rounded-xl  ease-in-out m-4">
+    <>        
+      <div className="relative flex group">
+        <button className="flex bg-white h-14 w-14 rounded-full transition-all hover:rounded-xl  ease-in-out m-4" onClick={()=>serverDispatch(setServerInfo(server))}>
           {server.name}
         </button>
+        <div className="absolute left-20 p-2 origin-left z-10 transition-all duration-200 scale-0 group-hover:scale-100 bg-slate-950 rounded-md text-white">
+          {server.name}
+        </div>
       </div>
     </>
   );

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setServerInfo } from '../../redux/reducer/serverReducer';
-const ServerCreationForm = () => {
+const ServerCreationForm = ({setServerCreationPress}) => {
     const serverInfo = useSelector(state=>state.serverInfo);
     const serverDispatch = useDispatch()
   const [serverName, setServerName] = useState('');
@@ -35,7 +35,9 @@ const ServerCreationForm = () => {
 
     if(response.ok){
         const data= response.json();
+        
         serverDispatch(setServerInfo(data.server))
+        setServerCreationPress(false)
     }
   };
 

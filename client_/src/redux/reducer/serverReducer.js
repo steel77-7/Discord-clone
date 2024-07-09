@@ -5,6 +5,7 @@ const initialState = {
   name: null,
   chats: [],
   members: [],
+  invites:[]
 };
 
 export const serverSlice = createSlice({
@@ -12,11 +13,12 @@ export const serverSlice = createSlice({
   initialState,
   reducers: {
     setServerInfo: (state, action) => {
-      const { _id, name, chats, members } = action.payload;
+      const { _id, name, chats, members ,invites} = action.payload;
       state._id = _id;
       state.name = name;
       state.chats = chats;
       state.members = members;
+      state.invites = invites
     },
     resetServerInfo: (state) => {
       state._id = null;

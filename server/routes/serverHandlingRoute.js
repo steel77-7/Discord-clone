@@ -7,12 +7,14 @@ const Chat = require("../modals/chatModel");
 const authenticator = require("../middlewares/authenticator");
 const Message = require("../modals/messageModel");
 const Server = require("../modals/serverModel");
-const {createChatController}= require('../controllers/chatController');
+const { createChatController } = require("../controllers/chatController");
 
-router.get("/serverList", authenticator, (req, res) => {
+router.get("/serverList", authenticator, async (req, res) => {
+  console.log("user id :", req.user);
   try {
     const userId = req.user;
-    const serverList = Server.findOne({ members: userId });
+    console.log(userId._id);
+    const serverList = await Server.find({ members: userId._id });
     console.log("list of servers is : ", serverList);
     if (serverList) {
       return res.status(200).json({ servers: serverList });
@@ -24,47 +26,41 @@ router.get("/serverList", authenticator, (req, res) => {
 });
 
 //server creation
-router.post("/createServer", authenticator,async (req, res) => {
+router.post("/createServer", authenticator, async (req, res) => {
   try {
     const { serverName } = req.body;
     const userId = req.user;
-    let membersArray=[]
-    let chatsArray = [];
+    let membersArray = [];
     membersArray.push(userId);
-    /* const chatCreation = await fetch(process.env.SERVER_API+'/chat/createChat',{
-        method:'POST',
-        headers: {
-            "Content-Type": "application/json",
-            'Authorization': `Bearer ${req.headers.authorization.split(" ")[1]}`,
-          },
-          body:JSON.stringify({name:'general',isServerChat:true,members:membersArray})
-    }) */
-    req.body.name = 'general';
-    req.body.isServerChat = true;
-    req.body.members = membersArray; 
-    const chatCreation = await createChatController(req);
-   
-    console.log("chat creation",chatCreation)
-    //data recieved after chat creation 
-    let chatData;
-    if(chatCreation._id){
-     chatData = chatCreation
-     chatsArray.push(chatData._id)
-    }
 
-    //serevr is created here
-    const server = Server.create({
+    const server = await Server.create({
       name: serverName,
       members: membersArray,
-      chats: chatsArray,
     });
     console.log("server created : ", server);
-    if (serverList) {
-      return res.status(200).json({server});
+    if (server) {
+      req.body.name = "general";
+      req.body.isServerChat = true;
+      req.body.members = membersArray;
+      req.body.serverid = server._id;
+      await createChatController(req,res);
+      return res.status(200).json({ server });
     }
   } catch (error) {
     console.error(error);
     res.status(500).json({ error });
+  }
+});
+
+router.post("/chatList", authenticator, async (req, res) => {
+  const serverid = req.headers.ServerId;
+  try {
+    const chats = await Chat.find({ server: serverid });
+    if (chats) {
+      return res.status(200).json({ chats });
+    }
+  } catch (error) {
+    console.error(error);
   }
 });
 

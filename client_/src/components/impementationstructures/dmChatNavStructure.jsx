@@ -72,7 +72,7 @@ const ChatNavRoutes = () => {
 };
 
 const DirectMessages = ({ user, setAddDmPress, addDmPress, dmList }) => {
-  console.log(dmList)
+
   const currentChat = useSelector((state) => state.currentChat);
   const dispatch = useDispatch();
   return (

@@ -61,7 +61,7 @@ export const ChatArea = () => {
 
       //console.log("Messages fetched");
       const data = await response.json();
-      console.log("data.messages", data, "user:", user);
+     
 
       setMessages(data.messages||[]);
     } catch (error) {

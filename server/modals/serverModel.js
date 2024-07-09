@@ -11,14 +11,17 @@ const serverSchema = new mongoose.Schema({
         type:String,
         
     },
-    chats:[{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'chat'
-    }],
     createdAt: {
         type: Date,
         Date: Date.now(),
-      }
+      },
+      invites:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref:'user'
+        }
+      ]
+      
       
 }
 )

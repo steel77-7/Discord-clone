@@ -33,7 +33,7 @@ const socketConnection = (httpServer) => {
       methods: ["GET", "POST"]
     }
   });
-  console.log(io)
+  
 
   io.on('connection', (socket) => {
     console.log('Socket connected', socket.id);

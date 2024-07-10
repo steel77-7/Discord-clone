@@ -37,15 +37,12 @@ router.post("/createServer", authenticator, async (req, res) => {
       name: serverName,
       members: membersArray,
     });
-    console.log("server created : ", server);
     if (server) {
       req.body.name = "general";
       req.body.isServerChat = true;
       req.body.members = membersArray;
       req.body.serverid = server._id;
       await createChatController(req);
-      
-      console.log('returned',server)
       return res.status(200).json({ server });
     }
   } catch (error) {
@@ -53,12 +50,15 @@ router.post("/createServer", authenticator, async (req, res) => {
     res.status(500).json({ error });
   }
 });
-
-router.post("/chatList", authenticator, async (req, res) => {
-  const serverid = req.headers.ServerId;
+//curretnly bruteforcing ******to be optomised later
+router.get("/chatList", authenticator, async (req, res) => {
+  console.log('guild chats')
+  const serverid = req.headers.serverid;
   try {
+    console.log(req.headers)
     const chats = await Chat.find({ server: serverid });
     if (chats) {
+      console.log('serverchats:',chats)
       return res.status(200).json({ chats });
     }
   } catch (error) {

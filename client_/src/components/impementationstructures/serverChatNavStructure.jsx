@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentChat } from "../../redux/reducer/currentChatReducer";
 import { setServerInfo } from "../../redux/reducer/serverReducer";
+import { ChannelCreationForm } from "../Server_components/channelCreationForm";
 const url = import.meta.env.VITE_SERVER_API;
 
 export const ServerChatNavStructure = () => {
@@ -25,9 +26,9 @@ export const ServerChatNavStructure = () => {
 
         if (response.ok) {
           const data = await response.json();
-
+          console.log('server chats',data)
           //setDmList(prevdata => [...prevdata,data.chat]);
-          setDmList(data.chat);
+          setDmList(data.chats);
         }
       } catch (error) {
         console.log(error);
@@ -64,25 +65,23 @@ export const ServerChatNavStructure = () => {
 const ServerChats = ({ user, setAddDmPress, addDmPress, dmList }) => {
   const currentChat = useSelector((state) => state.currentChat);
   const dispatch = useDispatch();
+  const [channelCreationPress,setChannelCreationPress] = useState(false)
   return (
     <div className="flex flex-col text-slate-300">
       
-
+    <div className="flex m-2 justify-between">
+      <p>add channel</p>
+      <button className="mr-2 scale-150" onClick={()=>setChannelCreationPress(!channelCreationPress)}>+</button>
+    </div>
+    {channelCreationPress&&<ChannelCreationForm/>}
       <div className="flex flex-col gap-3 h-dmHeight overflow-y-auto overflow dm-scroll">
         {dmList.length > 0 ? (
-          dmList.map((contacts, index) => {
-            let filteredMembers;
-            if (!contacts.isServerChat) {
-              filteredMembers = contacts.members.filter(
-                (member) => member._id !== user._id
-              );
-            }
-
+          dmList.map((contact, index) => {
             return (
-              <button onClick={() => dispatch(setCurrentChat(contacts))}>
+              <button onClick={() => dispatch(setCurrentChat(contact))}>
                 <SingleDirectMessageComponent
                   key={index}
-                  contact={filteredMembers}
+                  contact={contact}
                   user={user}
                 />
               </button>
@@ -99,17 +98,9 @@ const ServerChats = ({ user, setAddDmPress, addDmPress, dmList }) => {
 const SingleDirectMessageComponent = ({ user, contact }) => {
   if (!contact) return null;
   return (
-    <div className="flex   justify-around p-2 hover:bg-slate-400 m-1 rounded-md">
-      <img
-        src=""
-        alt="loading"
-        className="flex h-11 w-11 rounded-full bg-slate-50"
-      />
-      {/* {contact.name||contact.map(member=>{
-        console.log(member)
-        if(user._id!==member._id) return member.name
-        if(contact[0].name!==null) return contact.name
-      })} */}
+    <div className="flex  serverchat gap-4 p-2 hover:bg-zinc-800 duration:300 m-1 rounded-md  active:bg-gray-200">
+      <h1 className="scale-150">#</h1>
+      
       {contact.name || contact[0]?.name}
     </div>
   );

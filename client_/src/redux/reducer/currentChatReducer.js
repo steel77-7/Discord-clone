@@ -23,10 +23,17 @@ export const currentChatSlice = createSlice({
       state.name = name;
       state.createdAt = createdAt;
     },
+    resetCurrrentChat:(state)=>{
+      state._id = null
+      state.members = []
+      state.isServerChat = false
+      state.name = null
+      state.createdAt = null
+    }
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setCurrentChat } = currentChatSlice.actions;
+export const { setCurrentChat, resetCurrrentChat} = currentChatSlice.actions;
 
 export default currentChatSlice.reducer;

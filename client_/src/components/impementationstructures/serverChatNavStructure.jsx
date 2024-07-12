@@ -8,6 +8,7 @@ const url = import.meta.env.VITE_SERVER_API;
 export const ServerChatNavStructure = () => {
   const user = useSelector((state) => state.user);
   const serverInfo = useSelector((state) => state.serverInfo);
+  console.log('server info :',serverInfo)
   const serverDispatch = useDispatch();
   const [addDmPress, setAddDmPress] = useState(false);
   const [dmList, setDmList] = useState([]);
@@ -35,7 +36,7 @@ export const ServerChatNavStructure = () => {
       }
     };
     fetchDmList();
-  }, []);
+  }, [serverInfo]);
 
   return (
     <div className="flex h-full flex-col w-w-chatList bg-slate-700 left-20 text-slate-300">
@@ -48,6 +49,7 @@ export const ServerChatNavStructure = () => {
         setAddDmPress={setAddDmPress}
         addDmPress={addDmPress}
         dmList={dmList}
+        serverInfo ={serverInfo}
       />
       {addDmPress && (
         <AddDmComponent
@@ -73,8 +75,8 @@ const ServerChats = ({ user, setAddDmPress, addDmPress, dmList }) => {
       <p>add channel</p>
       <button className="mr-2 scale-150" onClick={()=>setChannelCreationPress(!channelCreationPress)}>+</button>
     </div>
-    {channelCreationPress&&<ChannelCreationForm/>}
-      <div className="flex flex-col gap-3 h-dmHeight overflow-y-auto overflow dm-scroll">
+    {channelCreationPress&&<ChannelCreationForm setChannelCreationPress={setChannelCreationPress}/>}
+      <div className="flex flex-col  h-dmHeight overflow-y-auto overflow dm-scroll">
         {dmList.length > 0 ? (
           dmList.map((contact, index) => {
             return (
@@ -98,7 +100,7 @@ const ServerChats = ({ user, setAddDmPress, addDmPress, dmList }) => {
 const SingleDirectMessageComponent = ({ user, contact }) => {
   if (!contact) return null;
   return (
-    <div className="flex  serverchat gap-4 p-2 hover:bg-zinc-800 duration:300 m-1 rounded-md  active:bg-gray-200">
+    <div className="flex  serverchat gap-4 p-2 hover:bg-zinc-800 duration:300  rounded-md  active:bg-gray-200">
       <h1 className="scale-150">#</h1>
       
       {contact.name || contact[0]?.name}

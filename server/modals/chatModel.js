@@ -22,6 +22,10 @@ const chatSchema = new mongoose.Schema({
       server :{
         type:mongoose.Schema.Types.ObjectId,
         ref:'server'
+      },
+      channelType:{
+        type:String,
+        default:null
       }
       
 }

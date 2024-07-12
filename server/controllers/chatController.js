@@ -9,7 +9,20 @@ exports.createChatController = async (req, res) => {
     const { username, members, isServerChat } = req.body;
     console.log(req.body);
     let finalMembers = [];
-    if (members.length > 2 && !isServerChat) {
+
+     if (isServerChat) {
+      console.log('SEERVERRRRR CHAT IS TRUEEEE')
+      const chat = await Chat.create({
+        members: members,
+        name: req.body.name,
+        isServerChat: true,
+        server:req.body.serverid,
+        //channelType : req.bodt.channelType
+      });
+      console.log('serverchat : ',chat)
+      return console.log('returning');
+    }
+   else if(members.length > 2 ) {
       for (const member of members) {
         console.log("member:", member);
         const user = await User.findOne({ _id: member });
@@ -20,17 +33,7 @@ exports.createChatController = async (req, res) => {
           finalMembers.push(req.user);
         }
       }
-    } else if (isServerChat) {
-      console.log('SEERVERRRRR CHAT IS TRUEEEE')
-      const chat = await Chat.create({
-        members: members,
-        name: req.body.name,
-        isServerChat: true,
-        server:req.body.serverid
-      });
-      console.log('serverchat : ',chat)
-      return console.log('returning');
-    } else {
+    }  else {
       const user = await User.findOne({ _id: members });
       if (user) {
         

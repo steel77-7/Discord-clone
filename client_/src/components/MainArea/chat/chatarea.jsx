@@ -8,7 +8,7 @@ export const ChatArea = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const socket = getSocket();
-  const { isConnected, setIsConnected } = useState(socket.connected);
+  const [ isConnected, setIsConnected ] = useState(socket.connected);
 
   //establishing socket connection 
   useEffect(() => {

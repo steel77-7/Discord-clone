@@ -42,7 +42,7 @@ router.post("/createServer", authenticator, async (req, res) => {
       req.body.isServerChat = true;
       req.body.members = membersArray;
       req.body.serverid = server._id;
-      await createChatController(req);
+      await createChatController(req,res);
       return res.status(200).json({ server });
     }
   } catch (error) {
@@ -55,7 +55,6 @@ router.get("/chatList", authenticator, async (req, res) => {
   console.log('guild chats')
   const serverid = req.headers.serverid;
   try {
-    console.log(req.headers)
     const chats = await Chat.find({ server: serverid });
     if (chats) {
       console.log('serverchats:',chats)
@@ -63,6 +62,25 @@ router.get("/chatList", authenticator, async (req, res) => {
     }
   } catch (error) {
     console.error(error);
+  }
+});
+
+
+router.post("/channelCreation", authenticator, async (req, res) => {
+  console.log("/handleChannelCreation route hit");
+  console.log("Request body:", req.body);
+  const { serverid, channelName, channelType } = req.body;
+  try {
+    req.body.name = channelName;
+    req.body.isServerChat = true;
+    req.body.members = null;
+    req.body.serverid = serverid;
+    req.body.channelType = channelType;
+    await createChatController(req,res);
+    return res.status(201).json({ message: "Channel created successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: "Internal server error" });
   }
 });
 

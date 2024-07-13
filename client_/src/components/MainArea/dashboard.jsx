@@ -24,7 +24,7 @@ export const Dashboard = () => {
         }
       );
       const data = await response.json();
-
+      setFriendList(data.friends)
     } catch (error) {
       console.log(error);
     }
@@ -44,11 +44,11 @@ export const Dashboard = () => {
             <AddFriendComponent />
           ) : (
             <div className=" some flex flex-col  gap-2 m-2 overflow-y-auto">
-              <FriendComponent currentChat={currentChat} />
-              <FriendComponent currentChat={currentChat} />
-              <FriendComponent currentChat={currentChat} />
-              <FriendComponent currentChat={currentChat} />
-              <FriendComponent currentChat={currentChat} />
+              {friendList.length>0?friendList.map((friend,index)=>{
+                return (
+                  <FriendComponent friend={friend} key={index}/>
+                )
+              }):<p>you are a loner</p>}
             </div>
           )}
         </div>

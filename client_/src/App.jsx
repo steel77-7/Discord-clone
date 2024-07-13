@@ -5,7 +5,7 @@ import './App.css'
 import { useDispatch, useSelector } from 'react-redux'
 import{setUser} from './redux/reducer/userReducer';
 import { Mainarea } from './components/MainArea/mainarea'
-import { useNavigate } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 
 
 function App() {
@@ -46,7 +46,7 @@ function App() {
   return(
     <>
       {/*adding the main area here */}
-    <Mainarea/>
+    <Outlet/>
     </>
   )
   }

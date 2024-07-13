@@ -10,18 +10,37 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store.js";
 import Login from "./components/authentication/login.jsx";
 import SignIn from "./components/authentication/signup.jsx";
+import { Dashboard } from "./components/MainArea/dashboard.jsx";
+import { ChatArea } from "./components/MainArea/chat/chatarea.jsx";
+import { Mainarea } from "./components/MainArea/mainarea.jsx";
 
 const router = createBrowserRouter([
   {
-    path: "/app",
+    path: "/",
     element:<App/> , 
+    children:[
+      {
+        path:'app',
+        element:< Mainarea/>,
+        children:[
+          {
+            path:'dashboard',
+            element:<Dashboard/>,
+          },
+          {
+            path:'chat',
+            element:<ChatArea/>,
+          },
+        ]
+      }
+    ]
   },
   {
-    path:'/login',
+    path:'login',
     element: <Login/>
   },
   {
-    path:'/',
+    path:'signup',
     element: <SignIn/>
   }
 

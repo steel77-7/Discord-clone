@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrentChat } from "../../redux/reducer/currentChatReducer";
+import { Link } from "react-router-dom";
 const url = import.meta.env.VITE_SERVER_API;
 
 export const DmChatNav = () => {
@@ -63,7 +64,7 @@ const ChatNavRoutes = () => {
   return (
     <div className="flex cahtnavroutes text-slate-300">
       <ul className="flex flex-col m-3 text-xl flex-grow">
-        <li className="hover:bg-slate-400 p-2 rounded-md">Friends</li>
+      <Link to={'dashboard'}> <li className="hover:bg-slate-400 p-2 rounded-md">Friends</li></Link>
         <li className="hover:bg-slate-400 p-2 rounded-md">Nitro</li>
         <li className="hover:bg-slate-400 p-2 rounded-md">Shop</li>
       </ul>
@@ -120,6 +121,8 @@ const SingleDirectMessageComponent = ({ user, contact }) => {
   
   if(!contact) return null
   return (
+    <>
+    <Link to ={'chat'}>
     <div className="flex   justify-around p-2 hover:bg-slate-400 m-1 rounded-md">
       <img
         src=""
@@ -133,6 +136,8 @@ const SingleDirectMessageComponent = ({ user, contact }) => {
       })} */}
       {contact.name || contact[0]?.name}
     </div>
+    </Link>
+    </>
   );
 };
 

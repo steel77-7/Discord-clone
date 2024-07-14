@@ -17,15 +17,15 @@ const userSchma = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
-  friends:{
+  friends:[{
     type:mongoose.Schema.Types.ObjectId,
     ref:'user',
-    default:0
-  },
+    default:[]
+  }],
   friendRequests:[{
     type:mongoose.Schema.Types.ObjectId,
     ref:'user',
-    default:0
+    default:[]
   }]
 
   

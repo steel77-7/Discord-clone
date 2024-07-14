@@ -83,7 +83,7 @@ export const ServerNavbar = ({
 };
 
 const ServerNavbarIcons = ({ server, dispatch }) => {
-  console.log("server is:", server);
+ 
   const handleClick = async()=>{
     console.log("server in the payload:", server);
     await dispatch(setServerInfo(server));

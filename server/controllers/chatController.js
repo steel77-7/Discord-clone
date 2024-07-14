@@ -85,7 +85,8 @@ exports.dmList = async (req, res) => {
 
 exports.allList = async (req, res) => {
   try {
-    const users = await User.find({});
+    const userId = req.user;
+    const users = await User.find({_id:{$ne:userId}});
     if (!users) {
       return res
         .status(400)

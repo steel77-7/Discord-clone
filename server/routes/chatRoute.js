@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const User = require("../modals/user");
 const authtenticator = require("../middlewares/authenticator");
 const Chat = require("../modals/chatModel");
+
 const {
   createChatController,
   dmList,

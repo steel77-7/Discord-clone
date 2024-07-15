@@ -10,7 +10,7 @@ const User = require("../modals/user");
 router.post("/register", async (req, res) => {
   try {
     const { email, password, username } = req.body;
-    console.log(email, password, username )
+    console.log(email, password, username);
     //salting and hashing password
     const salt = await bcrypt.genSaltSync(10);
     const secPass = await bcrypt.hash(password, salt);
@@ -73,7 +73,10 @@ router.post("/protected", authenticator, async (req, res) => {
   const userId = req.user;
 
   try {
-    const user = await User.findOne({ _id: userId._id });
+    const user = await User.findOne({ _id: userId._id })
+      .select("-password")
+      .populate("friendRequests")
+      .populate("friends");
     //
 
     if (user === null) {

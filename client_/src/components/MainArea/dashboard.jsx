@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { toast } from 'sonner';
+import { toast } from "sonner";
 import { useSelector } from "react-redux";
 
 export const Dashboard = () => {
@@ -116,16 +116,19 @@ const FriendNav = ({ setAddFriendPress }) => {
 const FriendComponent = ({ member }) => {
   return (
     <>
-      <hr className="border-t-2 border-slate-500 " />
-      <div className="flex border-white p-2 bg-slate-600 w-full h-20 items-center rounded-md gap-2 hover:bg-zinc-500">
-        <img
-          src=""
-          alt="loading"
-          className="flex h-12 w-12 bg-slate-300 rounded-full"
-        />
-        {member.name}
-      </div>
-      <hr className="border-t-2 border-slate-500 " />
+      <hr className="border-t-2 border-slate-500 my-2" />
+<div className="flex items-center p-4 bg-slate-700 rounded-md gap-4 hover:bg-slate-600 transition-colors duration-300">
+  <img
+    src=""
+    alt="loading"
+    className="h-12 w-12 bg-slate-300 rounded-full"
+  />
+  <div className=" text-white">
+    {member.name}
+  </div>
+</div>
+<hr className="border-t-2 border-slate-500 my-2" />
+
     </>
   );
 };
@@ -181,7 +184,7 @@ const AddFriendComponent = () => {
       console.log(error);
     }
   };
-  console.log("memberlsit length", memberList.length);
+  console.log("memberlist length", memberList.length);
   return (
     <>
       <div className="flex flex-col m-2 gap-2">
@@ -201,7 +204,12 @@ const AddFriendComponent = () => {
         {memberList.length > 0 ? (
           memberList.map((member, index) => {
             return (
-              <button onClick={() => {sendRequest(member._id);toast.success("request sent")}}>
+              <button
+                onClick={() => {
+                  sendRequest(member._id);
+                  toast.success("request sent");
+                }}
+              >
                 <FriendComponent member={member} key={index} />
               </button>
             );
@@ -214,47 +222,65 @@ const AddFriendComponent = () => {
   );
 };
 
-const PendingNav = ({user}) => {
-  //const [pendingList,setPendingList] = useState(user.friendRequests);
+const PendingNav = ({ user }) => {
+  const [status, setStatus] = useState(false);
   let pendingList = user.friendRequests;
-  console.log('pending requests')
-  const handleRequest = async()=>{
+  console.log("pending requests", pendingList);
+  console.log("user :", user);
+
+  const handleRequest = async () => {
     const response = await fetch(
-      import.meta.env.VITE_SERVER_API + "/chat/allList",
+      import.meta.env.VITE_SERVER_API + "/friends/handleFriendRequest",
       {
-        method: "GET",
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("authtoken")}`,
         },
+        body: JSON.stringify({ status }),
       }
     );
-  }
+    if (response.ok) {
+      toast.success(response.message);
+    } else toast.error(response.message);
+  };
   return (
     <>
       <div className="some flex flex-col  gap-2 m-2 overflow-y-auto">
-        {pendingList&&pendingList.length>0?(
-          <PendingRequests/>
-        ):
-        <h1>No Pending requests</h1>}
+        {pendingList && pendingList.length > 0 ? (
+          pendingList.map((member) => {
+            console.log("member", member);
+            return <PendingRequests member={member} />;
+          })
+        ) : (
+          <h1>No Pending requests</h1>
+        )}
       </div>
     </>
-  )
+  );
 };
 
 const PendingRequests = ({ member }) => {
   return (
     <>
-      <hr className="border-t-2 border-slate-500 " />
-      <div className="flex border-white p-2 bg-slate-600 w-full h-20 items-center rounded-md gap-2 hover:bg-zinc-500">
+      <hr className="border-t-2 border-slate-500 my-2" />
+      <div className="flex items-center p-4 bg-slate-700 rounded-md gap-4 hover:bg-slate-600 transition-colors duration-300">
         <img
           src=""
           alt="loading"
-          className="flex h-12 w-12 bg-slate-300 rounded-full"
+          className="h-12 w-12 bg-slate-300 rounded-full"
         />
-        {member.name}
+        <div className="flex-1 text-white">{member.name}</div>
+        <div className="ml-auto flex gap-3">
+          <button className="bg-green-500 hover:bg-green-600 text-white p-2 px-4 rounded-lg transition-colors duration-300">
+            Yes
+          </button>
+          <button className="bg-red-500 hover:bg-red-600 text-white p-2 px-4 rounded-lg transition-colors duration-300">
+            No
+          </button>
+        </div>
       </div>
-      <hr className="border-t-2 border-slate-500 " />
+      <hr className="border-t-2 border-slate-500 my-2" />
     </>
   );
 };

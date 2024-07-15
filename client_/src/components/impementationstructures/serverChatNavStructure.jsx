@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCurrentChat } from "../../redux/reducer/currentChatReducer";
 import { setServerInfo } from "../../redux/reducer/serverReducer";
 import { ChannelCreationForm } from "../Server_components/channelCreationForm";
+import { Link } from "react-router-dom";
 const url = import.meta.env.VITE_SERVER_API;
 
 export const ServerChatNavStructure = () => {
@@ -175,10 +176,10 @@ const AddDmComponent = ({ setAddDmPress, addDmPress, user }) => {
                       setDmId((prevDmId) => [...prevDmId, contact._id]);
                     }}
                   >
-                    <SingleDirectMessageComponent
+                    <Link to={'chat'}><SingleDirectMessageComponent
                       key={index}
                       contact={contact}
-                    />
+                    /></Link>
                   </button>
                 );
           })

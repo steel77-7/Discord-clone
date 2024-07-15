@@ -15,7 +15,7 @@ function App() {
 
   useEffect(()=>{
     checkUser();
-  },[user])
+  },[])
   const checkUser = async ()=>{
     console.log('checkUser initiated' )
     try {
@@ -35,6 +35,7 @@ function App() {
           return navigate('/login');
         }
         else if(data.valid){
+          console.log(data)
           dispatch(setUser(data.userObject));
         }
       }

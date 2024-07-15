@@ -22,7 +22,7 @@ export const userSlice = createSlice({
       state.name = name;
       state.email = email;
       state.createdAt = createdAt;
-      state.friends = createdAt;
+      state.friends = friends;
       state.friendRequests = friendRequests;
     }
     /* setUser: (state, action) => {

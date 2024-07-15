@@ -16,12 +16,14 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action) => {
-      const { _id, name, email, createdAt } = action.payload;
+      const { _id, name, email, createdAt,friendRequests,friends } = action.payload;
       console.log("payload : ", action,state)
       state._id = _id;
       state.name = name;
       state.email = email;
       state.createdAt = createdAt;
+      state.friends = createdAt;
+      state.friendRequests = friendRequests;
     }
     /* setUser: (state, action) => {
         state.value += 2;

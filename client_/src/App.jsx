@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import{setUser} from './redux/reducer/userReducer';
 import { Mainarea } from './components/MainArea/mainarea'
 import { Outlet, useNavigate } from 'react-router-dom'
-
+import { Toaster } from 'sonner';
 
 function App() {
   const navigate = useNavigate();
@@ -47,6 +47,17 @@ function App() {
     <>
       {/*adding the main area here */}
     <Outlet/>
+    <Toaster
+    position="top-center"
+        closeButton
+        toastOptions={{
+          style: {
+            background: '#2d3748', // bg-gray-700
+            color: '#f7fafc', // text-white
+          },
+          className: 'custom-toast-class',
+        }}
+      />
     </>
   )
   }

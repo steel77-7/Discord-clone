@@ -1,15 +1,45 @@
 import React, { useEffect, useState } from "react";
-
+import { toast } from 'sonner';
 import { useSelector } from "react-redux";
 
 export const Dashboard = () => {
   const currentChat = useSelector((state) => state.currentChat);
   const user = useSelector((state) => state.user);
-  const [addFriendPress, setAddFriendPress] = useState(false);
+  const [addFriendPress, setAddFriendPress] = useState("friends");
   const [friendList, setFriendList] = useState([]);
   useEffect(() => {
     fetchFriends();
   }, []);
+
+  const renderJSX = () => {
+    if (addFriendPress) {
+      console.log(addFriendPress);
+      switch (addFriendPress) {
+        case "friends":
+          return (
+            <div className=" some flex flex-col  gap-2 m-2 overflow-y-auto">
+              {friendList.length > 0 ? (
+                friendList.map((friend, index) => {
+                  return (
+                    <div>
+                      <FriendComponent member={friend} key={index} />
+                    </div>
+                  );
+                })
+              ) : (
+                <p>you are a loner</p>
+              )}
+            </div>
+          );
+        case "pending":
+          return <PendingNav user={user} />;
+        case "add":
+          return <AddFriendComponent />;
+        default:
+          return <h1>Nothing to show here</h1>;
+      }
+    }
+  };
 
   const fetchFriends = async () => {
     try {
@@ -40,19 +70,8 @@ export const Dashboard = () => {
             user={user}
           />
           <h1 className="ml-3 text-2xl">Friends</h1>
-          {addFriendPress ? (
-            <AddFriendComponent />
-          ) : (
-            <div className=" some flex flex-col  gap-2 m-2 overflow-y-auto">
-              {friendList.length > 0 ? (
-                friendList.map((friend, index) => {
-                  return <FriendComponent member={friend} key={index} />;
-                })
-              ) : (
-                <p>you are a loner</p>
-              )}
-            </div>
-          )}
+
+          {renderJSX()}
         </div>
       </div>
     </>
@@ -65,12 +84,19 @@ const FriendNav = ({ setAddFriendPress }) => {
       <div className="flex justify-around iems-center relative w-full h-10  bg-slate-700 text-white">
         <ul className=" w-full flex gap-10 px-4">
           <li>
-            <button onClick={() => setAddFriendPress(false)}>Friends</button>{" "}
+            <button onClick={() => setAddFriendPress("friends")}>
+              Friends
+            </button>
+          </li>
+          <li>
+            <button onClick={() => setAddFriendPress("pending")}>
+              Pending
+            </button>
           </li>
           <li>
             <button
               className="flex  p-0.5  bg-lime-600 rounded-md "
-              onClick={() => setAddFriendPress(true)}
+              onClick={() => setAddFriendPress("add")}
             >
               Add Friend
             </button>
@@ -90,7 +116,7 @@ const FriendNav = ({ setAddFriendPress }) => {
 const FriendComponent = ({ member }) => {
   return (
     <>
-    <hr className="border-t-2 border-slate-500 " />
+      <hr className="border-t-2 border-slate-500 " />
       <div className="flex border-white p-2 bg-slate-600 w-full h-20 items-center rounded-md gap-2 hover:bg-zinc-500">
         <img
           src=""
@@ -99,14 +125,14 @@ const FriendComponent = ({ member }) => {
         />
         {member.name}
       </div>
-      <hr className="border-t-2 border-slate-500 "/>
+      <hr className="border-t-2 border-slate-500 " />
     </>
   );
 };
 
 const AddFriendComponent = () => {
   const [memberList, setMemberList] = useState([]);
-  let data
+  let data;
   useEffect(() => {
     fetchAllMembers();
   }, []);
@@ -150,13 +176,12 @@ const AddFriendComponent = () => {
 
       if (response.ok) {
         data = await response.json();
-  
       }
     } catch (error) {
       console.log(error);
     }
   };
-console.log('memberlsit length',memberList.length)
+  console.log("memberlsit length", memberList.length);
   return (
     <>
       <div className="flex flex-col m-2 gap-2">
@@ -173,10 +198,10 @@ console.log('memberlsit length',memberList.length)
         press the members to send them request
       </div>
       <div className="some flex flex-col  gap-2 m-2 overflow-y-auto">
-        { memberList.length > 0 ? (
+        {memberList.length > 0 ? (
           memberList.map((member, index) => {
             return (
-              <button  onClick={()=>sendRequest(member._id)}>
+              <button onClick={() => {sendRequest(member._id);toast.success("request sent")}}>
                 <FriendComponent member={member} key={index} />
               </button>
             );
@@ -185,6 +210,51 @@ console.log('memberlsit length',memberList.length)
           <p>no members to show here</p>
         )}
       </div>
+    </>
+  );
+};
+
+const PendingNav = ({user}) => {
+  //const [pendingList,setPendingList] = useState(user.friendRequests);
+  let pendingList = user.friendRequests;
+  console.log('pending requests')
+  const handleRequest = async()=>{
+    const response = await fetch(
+      import.meta.env.VITE_SERVER_API + "/chat/allList",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("authtoken")}`,
+        },
+      }
+    );
+  }
+  return (
+    <>
+      <div className="some flex flex-col  gap-2 m-2 overflow-y-auto">
+        {pendingList&&pendingList.length>0?(
+          <PendingRequests/>
+        ):
+        <h1>No Pending requests</h1>}
+      </div>
+    </>
+  )
+};
+
+const PendingRequests = ({ member }) => {
+  return (
+    <>
+      <hr className="border-t-2 border-slate-500 " />
+      <div className="flex border-white p-2 bg-slate-600 w-full h-20 items-center rounded-md gap-2 hover:bg-zinc-500">
+        <img
+          src=""
+          alt="loading"
+          className="flex h-12 w-12 bg-slate-300 rounded-full"
+        />
+        {member.name}
+      </div>
+      <hr className="border-t-2 border-slate-500 " />
     </>
   );
 };

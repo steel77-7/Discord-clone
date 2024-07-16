@@ -117,18 +117,15 @@ const FriendComponent = ({ member }) => {
   return (
     <>
       <hr className="border-t-2 border-slate-500 my-2" />
-<div className="flex items-center p-4 bg-slate-700 rounded-md gap-4 hover:bg-slate-600 transition-colors duration-300">
-  <img
-    src=""
-    alt="loading"
-    className="h-12 w-12 bg-slate-300 rounded-full"
-  />
-  <div className=" text-white">
-    {member.name}
-  </div>
-</div>
-<hr className="border-t-2 border-slate-500 my-2" />
-
+      <div className="flex items-center p-4 bg-slate-700 rounded-md gap-4 hover:bg-slate-600 transition-colors duration-300">
+        <img
+          src=""
+          alt="loading"
+          className="h-12 w-12 bg-slate-300 rounded-full"
+        />
+        <div className=" text-white">{member.name}</div>
+      </div>
+      <hr className="border-t-2 border-slate-500 my-2" />
     </>
   );
 };
@@ -223,12 +220,12 @@ const AddFriendComponent = () => {
 };
 
 const PendingNav = ({ user }) => {
-  const [status, setStatus] = useState(false);
+  const [action, setAction] = useState({});
   let pendingList = user.friendRequests;
   console.log("pending requests", pendingList);
   console.log("user :", user);
 
-  const handleRequest = async () => {
+  const handleRequest = async (member,status) => {
     const response = await fetch(
       import.meta.env.VITE_SERVER_API + "/friends/handleFriendRequest",
       {
@@ -237,12 +234,14 @@ const PendingNav = ({ user }) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("authtoken")}`,
         },
-        body: JSON.stringify({ status }),
+        body: JSON.stringify({ member,status }),
       }
     );
     if (response.ok) {
-      toast.success(response.message);
-    } else toast.error(response.message);
+      const data =await response.json()
+      console.log('pending res',data)
+      toast.success(data.message);
+    } else toast.error(data.message);
   };
   return (
     <>
@@ -250,7 +249,13 @@ const PendingNav = ({ user }) => {
         {pendingList && pendingList.length > 0 ? (
           pendingList.map((member) => {
             console.log("member", member);
-            return <PendingRequests member={member} />;
+            return (
+              <PendingRequests
+                member={member}
+                action={action}
+                handleRequest={handleRequest}
+              />
+            );
           })
         ) : (
           <h1>No Pending requests</h1>
@@ -260,7 +265,8 @@ const PendingNav = ({ user }) => {
   );
 };
 
-const PendingRequests = ({ member }) => {
+const PendingRequests = ({ member, handleRequest }) => {
+  let status;
   return (
     <>
       <hr className="border-t-2 border-slate-500 my-2" />
@@ -272,10 +278,20 @@ const PendingRequests = ({ member }) => {
         />
         <div className="flex-1 text-white">{member.name}</div>
         <div className="ml-auto flex gap-3">
-          <button className="bg-green-500 hover:bg-green-600 text-white p-2 px-4 rounded-lg transition-colors duration-300">
+          <button
+            className="bg-green-500 hover:bg-green-600 text-white p-2 px-4 rounded-lg transition-colors duration-300"
+            onClick={() => {
+              handleRequest(member._id, true);
+            }}
+          >
             Yes
           </button>
-          <button className="bg-red-500 hover:bg-red-600 text-white p-2 px-4 rounded-lg transition-colors duration-300">
+          <button
+            className="bg-red-500 hover:bg-red-600 text-white p-2 px-4 rounded-lg transition-colors duration-300"
+            onClick={() => {
+              handleRequest(member._id, false);
+            }}
+          >
             No
           </button>
         </div>

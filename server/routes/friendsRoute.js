@@ -38,23 +38,43 @@ router.post("/friendRequest", authenticator, async (req, res) => {
 });
 
 router.post("/handleFriendRequest", authenticator, async (req, res) => {
+  console.log("handle friend request initited");
   try {
     const userid = req.user;
     //friend reciepient is the one that sent the request
-    const { response, friendRecipient } = req.body;
-    if (response) {
-      const user = User.findByIdAndUpdate(
+    const { member, status } = req.body;
+    console.log(req.body);
+    if (status) {
+      const user = await User.findByIdAndUpdate(
         userid,
         {
-          $push: { friends: friendRecipient },
-          $push: { friendRequests: friendRecipient },
+          $push: { friends: member },
+          $pull: { friendRequests: member },
+        },
+
+        { new: true }
+      );
+
+      await User.findByIdAndUpdate(
+        member,
+        {
+          $push: { friends: userid },
         },
 
         { new: true }
       );
       return res.status(200).json({ message: "Friend request accepted" });
+    } else {
+      const user = await User.findByIdAndUpdate(
+        userid,
+        {
+          $pull: { friendRequests: member },
+        },
+
+        { new: true }
+      );
+      return res.status(200).json({ message: "Friend request rejected" });
     }
-    return res.status(200).json({ message: "Friend request rejected" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error });

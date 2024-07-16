@@ -9,7 +9,7 @@ const url = import.meta.env.VITE_SERVER_API;
 export const ServerChatNavStructure = () => {
   const user = useSelector((state) => state.user);
   const serverInfo = useSelector((state) => state.serverInfo);
-  console.log('server info :',serverInfo)
+  console.log("server info :", serverInfo);
   const serverDispatch = useDispatch();
   const [addDmPress, setAddDmPress] = useState(false);
   const [dmList, setDmList] = useState([]);
@@ -22,13 +22,13 @@ export const ServerChatNavStructure = () => {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("authtoken")}`,
-            'ServerId' : `${serverInfo._id}`
+            ServerId: `${serverInfo._id}`,
           },
         });
 
         if (response.ok) {
           const data = await response.json();
-          console.log('server chats',data)
+          console.log("server chats", data);
           //setDmList(prevdata => [...prevdata,data.chat]);
           setDmList(data.chats);
         }
@@ -42,15 +42,15 @@ export const ServerChatNavStructure = () => {
   return (
     <div className="flex h-full flex-col w-w-chatList bg-slate-700 left-20 text-slate-300">
       <div className="flex relative  py-2 items-center flex-col border-b border-solid border-slate-900 ">
-        {serverInfo.name&&serverInfo.name}
+        {serverInfo.name && serverInfo.name}
       </div>
-    
+
       <ServerChats
         user={user}
         setAddDmPress={setAddDmPress}
         addDmPress={addDmPress}
         dmList={dmList}
-        serverInfo ={serverInfo}
+        serverInfo={serverInfo}
       />
       {addDmPress && (
         <AddDmComponent
@@ -63,30 +63,38 @@ export const ServerChatNavStructure = () => {
   );
 };
 
-
-
 const ServerChats = ({ user, setAddDmPress, addDmPress, dmList }) => {
   const currentChat = useSelector((state) => state.currentChat);
   const dispatch = useDispatch();
-  const [channelCreationPress,setChannelCreationPress] = useState(false)
+  const [channelCreationPress, setChannelCreationPress] = useState(false);
   return (
     <div className="flex flex-col text-slate-300">
-      
-    <div className="flex m-2 justify-between">
-      <p>add channel</p>
-      <button className="mr-2 scale-150" onClick={()=>setChannelCreationPress(!channelCreationPress)}>+</button>
-    </div>
-    {channelCreationPress&&<ChannelCreationForm setChannelCreationPress={setChannelCreationPress}/>}
+      <div className="flex m-2 justify-between">
+        <p>add channel</p>
+        <button
+          className="mr-2 scale-150"
+          onClick={() => setChannelCreationPress(!channelCreationPress)}
+        >
+          +
+        </button>
+      </div>
+      {channelCreationPress && (
+        <ChannelCreationForm
+          setChannelCreationPress={setChannelCreationPress}
+        />
+      )}
       <div className="flex flex-col  h-dmHeight overflow-y-auto overflow dm-scroll">
         {dmList.length > 0 ? (
           dmList.map((contact, index) => {
             return (
               <button onClick={() => dispatch(setCurrentChat(contact))}>
-                <SingleDirectMessageComponent
-                  key={index}
-                  contact={contact}
-                  user={user}
-                />
+                <Link to={"chat"}>
+                  <SingleDirectMessageComponent
+                    key={index}
+                    contact={contact}
+                    user={user}
+                  />
+                </Link>
               </button>
             );
           })
@@ -103,7 +111,7 @@ const SingleDirectMessageComponent = ({ user, contact }) => {
   return (
     <div className="flex  serverchat gap-4 p-2 hover:bg-zinc-800 duration:300  rounded-md  active:bg-gray-200">
       <h1 className="scale-150">#</h1>
-      
+
       {contact.name || contact[0]?.name}
     </div>
   );
@@ -176,10 +184,10 @@ const AddDmComponent = ({ setAddDmPress, addDmPress, user }) => {
                       setDmId((prevDmId) => [...prevDmId, contact._id]);
                     }}
                   >
-                    <Link to={'chat'}><SingleDirectMessageComponent
+                    <SingleDirectMessageComponent
                       key={index}
                       contact={contact}
-                    /></Link>
+                    />
                   </button>
                 );
           })

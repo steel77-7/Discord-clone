@@ -97,7 +97,7 @@ export const ChatArea = () => {
         message: newMessage,
         chat: currentChat,
         sender: user,
-        createdAt: Date.UTC,
+        createdAt: Date.now,
       });
       const newMsg = {
         message: newMessage,
@@ -168,8 +168,9 @@ const MessageNav = ({ currentChat, user }) => {
         </ul>
         <div className="flex">
           <ul className=" w-full flex gap-10 px-4">
-            <li>other</li>
-            <li>other</li>
+            <li>create group</li>
+            <li>video call</li>
+            <li>audio call</li>
           </ul>
         </div>
       </div>

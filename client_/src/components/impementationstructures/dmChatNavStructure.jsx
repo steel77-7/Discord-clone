@@ -24,7 +24,7 @@ export const DmChatNav = () => {
           const data = await response.json();
           
           //setDmList(prevdata => [...prevdata,data.chat]);
-          setDmList(data.chat);
+          setDmList(data.chats);
         }
       } catch (error) {
         console.log(error);
@@ -73,7 +73,7 @@ const ChatNavRoutes = () => {
 };
 
 const DirectMessages = ({ user, setAddDmPress, addDmPress, dmList }) => {
-
+  console.log('dm list', dmList)
   const currentChat = useSelector((state) => state.currentChat);
   const dispatch = useDispatch();
   return (
@@ -92,9 +92,9 @@ const DirectMessages = ({ user, setAddDmPress, addDmPress, dmList }) => {
         {dmList.length > 0 ? (
           dmList.map((contacts, index) => {
             
-            let filteredMembers
+            
             if(!contacts.isServerChat){
-            filteredMembers = contacts.members.filter(
+            contacts.members = contacts.members.filter(
               (member) => member._id !== user._id 
             );
           }
@@ -103,7 +103,7 @@ const DirectMessages = ({ user, setAddDmPress, addDmPress, dmList }) => {
               <button onClick={() => dispatch(setCurrentChat(contacts))}>
                 <SingleDirectMessageComponent
                   key={index}
-                  contact={filteredMembers}
+                  contact={contacts}
                   user={user}
                 />
               </button>
@@ -118,12 +118,12 @@ const DirectMessages = ({ user, setAddDmPress, addDmPress, dmList }) => {
 };
 
 const SingleDirectMessageComponent = ({ user, contact }) => {
-  
+  console.log('contact',contact)
   if(!contact) return null
   return (
     <>
     <Link to ={'chat'}>
-    <div className="flex   justify-around p-2 hover:bg-slate-400 m-1 rounded-md">
+    <div className="flex  gap-4 p-2 hover:bg-slate-400 m-1 rounded-md">
       <img
         src=""
         alt="loading"
@@ -134,7 +134,11 @@ const SingleDirectMessageComponent = ({ user, contact }) => {
         if(user._id!==member._id) return member.name
         if(contact[0].name!==null) return contact.name
       })} */}
-      {contact.name || contact[0]?.name}
+      <div className="flex flex-col items-start">
+      {contact.name || contact.members[0].name}
+      {contact.latestMessage!==null?<p className="text-xs">{contact.latestMessage.message}</p>:<p className="text-s">no new messages</p>}
+
+      </div>
     </div>
     </Link>
     </>
@@ -142,14 +146,15 @@ const SingleDirectMessageComponent = ({ user, contact }) => {
 };
 
 const AddDmComponent = ({ setAddDmPress, addDmPress, user }) => {
-  const [allList, setAllList] = useState([]);
+  const [allList, setAllList] = useState(user.friends);
   const [name, setName] = useState("");
   const [dmId, setDmId] = useState([]);
+  console.log('allist' , allList)
 
-  useEffect(() => {
+  /* useEffect(() => {
     const fetchAllMembers = async () => {
       try {
-        const response = await fetch(url + "/chat/allList", {
+        const response = await fetch(url + "/friend/friendList", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -166,7 +171,7 @@ const AddDmComponent = ({ setAddDmPress, addDmPress, user }) => {
       }
     };
     fetchAllMembers();
-  }, []);
+  }, []);*/
 
   const handleCreateDm = async () => {
     const response = await fetch(url + "/chat/createChat", {
@@ -178,7 +183,7 @@ const AddDmComponent = ({ setAddDmPress, addDmPress, user }) => {
       body: JSON.stringify({ username: name, members: dmId }),
     });
     setAddDmPress(!addDmPress);
-  };
+  }; 
 
   const handleChange = (e) => {
     setName(e.target.value);
@@ -197,8 +202,8 @@ const AddDmComponent = ({ setAddDmPress, addDmPress, user }) => {
         onChange={handleChange}
       />
       <div className="flex flex-col gap-2  overflow-y-auto overflow dm-scroll">
-        {allList.users ? (
-          allList.users.map((contact, index) => {
+        {allList ? (
+          allList.map((contact, index) => {
             if (contact._id !== user._id)
               if (contact.name.toUpperCase().indexOf(name.toUpperCase()) > -1)
                 return (
@@ -219,12 +224,21 @@ const AddDmComponent = ({ setAddDmPress, addDmPress, user }) => {
           <h1>Nothing to show here</h1>
         )}
       </div>
+      <div className="flex justify-between gap-4">
       <button
-        className="flex justify-center p-2 rounded-md bg-cyan-700"
+        className="flex flex-1 justify-center p-2 rounded-md bg-cyan-700"
         onClick={handleCreateDm}
       >
         Create
       </button>
+      <button
+        className="flex flex-1 justify-center p-2 rounded-md bg-cyan-700"
+        onClick={()=>setAddDmPress(false)}
+      >
+        Cancel
+      </button>
+      </div>
+     
     </div>
   );
 };

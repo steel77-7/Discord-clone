@@ -22,49 +22,60 @@ router.get("/fetchMessage", authenticator, async (req, res) => {
   }
 });
 
-  router.post("/saveMessage", authenticator, async (req, res) => {
-    try {
-        console.log('save message intited')
-      const { message, sender, chat } = req.body;
-      const newMessage = await Message.create({
-        sender: sender,
-        chat: chat._id,
-        message: message,
-      });
-      if (newMessage) {
-        console.log(newMessage)
-        res.status(200).json({ message: "message saved" });
-      } else {
-        res.status(200).json({ message: "database error" });
-      }
-    } catch (error) {
-      res.status(500).json({ message: "database error" + error });
-    }
-  });
+router.post("/saveMessage", authenticator, async (req, res) => {
+  try {
+    console.log("save message intited");
+    const { message, sender, chat } = req.body;
+    const newMessage = await Message.create({
+      sender: sender,
+      chat: chat._id,
+      message: message,
+    });
 
-  router.post('/editMessage',authenticator, async (req,res)=>{
-    try {
-      const {message}= req.body;
-      console.log(message)
-      const result = await Message.findOneAndUpdate({_id:message._id},{$set:{message:message.message}})
-      console.log('Message update results :',result)
-      res.send({message:'message updated '})
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({message:'message not updated'});
+    await Chat.findByIdAndUpdate(
+      chat._id,
+      { $set: { latestMessage: newMessage } },
+      { new: true }
+    );
+    if (newMessage) {
+      console.log(newMessage);
+      res.status(200).json({ message: "message saved" });
+    } else {
+      res.status(200).json({ message: "database error" });
     }
-  })
-  router.post('/deleteMessage',authenticator, async (req,res)=>{
-    try {
-      const {message}= req.body;
-      console.log('message is :',message)
-      const result = await Message.findByIdAndDelete(message._id);
-      console.log('Message deletion results :',result)
-      res.send({message:'message deleted '})
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({message:'message not deleted'});
-    }
-  })
+  } catch (error) {
+    res.status(500).json({ message: "database error" + error });
+  }
+});
 
-  module.exports = router; 
+router.post("/editMessage/:messageid", authenticator, async (req, res) => {
+  try {
+    const mess_id = req.params.messageid;
+
+    const { newMessage } = req.body;
+    const result = await Message.findOneAndUpdate(
+      { _id: mess_id },
+      { $set: { message: newMessage } }
+    );
+    console.log("Message update results :", result);
+    res.send({ message: "message updated " });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "message not updated" });
+  }
+});
+router.post("/deleteMessage/:messageid", authenticator, async (req, res) => {
+  try {
+    console.log("delete message initiated");
+    const mess_id = req.params.messageid;
+    console.log("message is :", mess_id);
+    const result = await Message.findByIdAndDelete(mess_id);
+    console.log("Message deletion results :", result);
+    res.send({ message: "message deleted " });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "message not deleted" });
+  }
+});
+
+module.exports = router;

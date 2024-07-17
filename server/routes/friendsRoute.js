@@ -45,7 +45,7 @@ router.post("/handleFriendRequest", authenticator, async (req, res) => {
     const { member, status } = req.body;
     console.log(req.body);
     if (status) {
-      const user = await User.findByIdAndUpdate(
+      await User.findByIdAndUpdate(
         userid,
         {
           $push: { friends: member },

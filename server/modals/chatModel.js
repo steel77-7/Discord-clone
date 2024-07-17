@@ -23,6 +23,11 @@ const chatSchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:'server'
       },
+      latestMessage:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'messages',
+        default:null
+      },
       channelType:{
         type:String,
         default:null

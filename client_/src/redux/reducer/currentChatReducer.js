@@ -16,12 +16,13 @@ export const currentChatSlice = createSlice({
       console.log(action.payload)
       state = action.payload;
     } */ setCurrentChat: (state, action) => {
-      const { _id, members, isServerChat, name, createdAt } = action.payload;
+      const { _id, members, isServerChat, name, createdAt,latestMessage } = action.payload;
       state._id = _id;
       state.members = members;
       state.isServerChat = isServerChat;
       state.name = name;
       state.createdAt = createdAt;
+      state.latestMessage = latestMessage;
     },
     resetCurrrentChat:(state)=>{
       state._id = null

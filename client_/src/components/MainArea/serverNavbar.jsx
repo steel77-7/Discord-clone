@@ -96,7 +96,7 @@ const ServerNavbarIcons = ({ server, dispatch }) => {
       >
         {server.name}
       </button>
-      <div className="absolute left-20 p-2 origin-left z-10 transition-all duration-200 scale-0 group-hover:scale-100 bg-slate-950 rounded-md text-white">
+      <div className="absolute left-20 p-2 origin-left z-10 transition-all duration-150 scale-0 group-hover:scale-100 bg-slate-950 rounded-md text-white">
         {server.name}
       </div>
     </div>

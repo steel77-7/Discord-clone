@@ -20,6 +20,7 @@ export const Dashboard = () => {
             <div className=" some flex flex-col  gap-2 m-2 overflow-y-auto">
               {friendList.length > 0 ? (
                 friendList.map((friend, index) => {
+
                   return (
                     <div>
                       <FriendComponent member={friend} key={index} />
@@ -54,7 +55,8 @@ export const Dashboard = () => {
         }
       );
       const data = await response.json();
-      setFriendList(data.friends);
+      console.log('friends:', data)
+      setFriendList(data.friends.friends);
     } catch (error) {
       console.log(error);
     }

@@ -63,7 +63,7 @@ exports.dmList = async (req, res) => {
   const user = req.user;
 
   try {
-    const chat = await Chat.find({ members: user })
+    const chat = await Chat.find({ members: user, isServerChat:false })
       .populate("members", "-password")
       .populate("latestMessage");
 

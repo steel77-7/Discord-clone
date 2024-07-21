@@ -75,7 +75,7 @@ router.delete("/deleteMessage/:messageid", authenticator, async (req, res) => {
     console.log("message is :", mess_id);
     const result = await Message.findByIdAndDelete(mess_id);
     console.log("Message deletion results :", result);
-    res.send({ message: "message deleted " });
+    res.send({ message: "message deleted " ,result});
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "message not deleted" });

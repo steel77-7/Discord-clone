@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { toast } from "sonner";
-export const MessageComponent = ({ message ,setMessages}) => {
+export const MessageComponent = ({ message, setMessages }) => {
   const [newMessage, setNewMessage] = useState(message.message);
   const [editPress, setEditPress] = useState(false);
+  //deletion
   const handleDelete = async () => {
     try {
       const res = await fetch(
@@ -24,11 +25,17 @@ export const MessageComponent = ({ message ,setMessages}) => {
 
       const result = await res.json();
       console.log(result);
-      //setMessages((prev)=>{prev.filter((previous)=>previous._id!==message._id)})
-      setMessages((prev)=>{return prev.filter((previous)=>previous._id!==message._id)
-       
       
-      })
+
+      //THIS IS BEHAVING UNEXPECTEDLYYYYYYYYYYYY
+      //FIX THIS LATEERERRRRRRRRRRRRRRRRRRRRRRRRRR
+      setMessages((prev) => {
+        const newMess = prev.filter(
+          (previous) => previous._id !== result.result._id
+        );
+        console.log("new mess", newMess);
+        return newMess;
+      });
       // Handle successful deletion (e.g., update state to remove the message)
     } catch (error) {
       console.error("Error deleting message:", error);
@@ -81,7 +88,7 @@ export const MessageComponent = ({ message ,setMessages}) => {
           <div className="flex flex-col flex-1">
             <div className="flex justify-between">
               <div className="flex items-center gap-2">
-                <b>{message.sender.name||message.sender}</b>
+                <b>{message.sender.name || message.sender}</b>
                 <span className="text-xs text-gray-400">
                   {message.createdAt}
                 </span>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { MessageComponent } from "./messagecomponent";
 import { useSelector } from "react-redux";
 import getSocket from "../../../misc/getSocket";
+import { toast } from "sonner";
 export const ChatArea = () => {
   const currentChat = useSelector((state) => state.currentChat);
   const user = useSelector((state) => state.user);
@@ -90,25 +91,23 @@ export const ChatArea = () => {
           }),
         }
       );
-
+      if(response.ok){
       const data = await response.json();
-
-      socket.emit("send-message", {
+      console.log('saved message',data)
+      /* socket.emit("send-message", {
         message: newMessage,
         chat: currentChat,
         sender: user,
         createdAt: Date.now,
-      });
-      const newMsg = {
-        message: newMessage,
-        chat: currentChat,
-        sender: user,
-        createdAt: Date.now(),
-      };
-      setMessages((prev) => [...prev, newMsg]);
+      }); */
+      socket.emit("send-message", data.latestMessage);
+      
+      setMessages((prev) => [...prev, data.latestMessage]);
       setNewMessage("");
+    }
     } catch (error) {
       console.error(error);
+      toast.error('message not sent')
     }
   };
 
@@ -125,7 +124,7 @@ export const ChatArea = () => {
           {messages &&
             messages.map((message, index) => {
               //console.log('message : ',message)
-              return <MessageComponent message={message} key={index} />;
+              return <MessageComponent message={message} key={index} setMessages={setMessages} />;
             })}
         </div>
         {currentChat._id && (

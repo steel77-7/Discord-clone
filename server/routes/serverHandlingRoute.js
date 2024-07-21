@@ -10,12 +10,12 @@ const Server = require("../modals/serverModel");
 const { createChatController } = require("../controllers/chatController");
 
 router.get("/serverList", authenticator, async (req, res) => {
-  console.log("user id :", req.user);
+  //console.log("user id :", req.user);
   try {
     const userId = req.user;
-    console.log(userId._id);
+    //console.log(userId._id);
     const serverList = await Server.find({ members: userId._id });
-    console.log("list of servers is : ", serverList);
+    //console.log("list of servers is : ", serverList);
     if (serverList) {
       return res.status(200).json({ servers: serverList });
     }
@@ -52,12 +52,12 @@ router.post("/createServer", authenticator, async (req, res) => {
 });
 //curretnly bruteforcing ******to be optomised later
 router.get("/chatList", authenticator, async (req, res) => {
-  console.log('guild chats')
+  //console.log('guild chats')
   const serverid = req.headers.serverid;
   try {
     const chats = await Chat.find({ server: serverid });
     if (chats) {
-      console.log('serverchats:',chats)
+      //console.log('serverchats:',chats)
       return res.status(200).json({ chats });
     }
   } catch (error) {
@@ -67,8 +67,8 @@ router.get("/chatList", authenticator, async (req, res) => {
 
 
 router.post("/channelCreation", authenticator, async (req, res) => {
-  console.log("/handleChannelCreation route hit");
-  console.log("Request body:", req.body);
+  //console.log("/handleChannelCreation route hit");
+  //console.log("Request body:", req.body);
   const { serverid, channelName, channelType } = req.body;
   try {
     req.body.name = channelName;

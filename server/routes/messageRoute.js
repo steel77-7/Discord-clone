@@ -32,39 +32,43 @@ router.post("/saveMessage", authenticator, async (req, res) => {
       message: message,
     });
 
+    const populatedMessage = await newMessage.populate('sender');
     await Chat.findByIdAndUpdate(
       chat._id,
-      { $set: { latestMessage: newMessage } },
+      { $set: { latestMessage: populatedMessage } },
       { new: true }
     );
-    if (newMessage) {
-      console.log(newMessage);
-      res.status(200).json({ message: "message saved" });
+    if (populatedMessage) {
+      console.log(populatedMessage);
+      res.status(200).json({ message: "message saved" ,latestMessage:populatedMessage});
     } else {
-      res.status(200).json({ message: "database error" });
+      res.status(500).json({ message: "database error" });
     }
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "database error" + error });
   }
 });
 
-router.post("/editMessage/:messageid", authenticator, async (req, res) => {
+router.patch("/editMessage/:messageid", authenticator, async (req, res) => {
   try {
     const mess_id = req.params.messageid;
-
-    const { newMessage } = req.body;
-    const result = await Message.findOneAndUpdate(
-      { _id: mess_id },
-      { $set: { message: newMessage } }
+    console.log("patch inititated",req.body)
+    const { message } = req.body;
+    const result = await Message.findByIdAndUpdate(
+      mess_id,
+      { $set: { message: message } },
+      {new:true}
     );
+
     console.log("Message update results :", result);
-    res.send({ message: "message updated " });
+    res.send({ message: "message updated ",result });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "message not updated" });
   }
 });
-router.post("/deleteMessage/:messageid", authenticator, async (req, res) => {
+router.delete("/deleteMessage/:messageid", authenticator, async (req, res) => {
   try {
     console.log("delete message initiated");
     const mess_id = req.params.messageid;

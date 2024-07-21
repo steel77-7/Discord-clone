@@ -10,7 +10,7 @@ const db = require('./db.js')
 
 app.use(cors({
     origin:"*",
-    methods:["GET",'POST']
+    methods:["GET",'POST',"PATCH","DELETE"]
 }));
 app.use(express.json());
 

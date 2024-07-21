@@ -270,7 +270,7 @@ const PendingRequests = ({ member, handleRequest }) => {
   return (
     <>
       <hr className="border-t-2 border-slate-500 my-2" />
-      <div className="flex items-center p-4 bg-slate-700 rounded-md gap-4 hover:bg-slate-600 transition-colors duration-300">
+      <div className="flex items-center p-4 bg-slate-700 rounded-md gap-4 hover:bg-sla.te-600 transition-colors duration-300">
         <img
           src=""
           alt="loading"

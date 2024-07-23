@@ -17,7 +17,7 @@ export const ServerChatNavStructure = () => {
   useEffect(() => {
     const fetchDmList = async () => {
       try {
-        const response = await fetch(url + "/guild/chatList", {
+        const response = await fetch(url + `/guild/chatList/:${serverInfo._id}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

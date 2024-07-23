@@ -13,6 +13,7 @@ import SignIn from "./components/authentication/signup.jsx";
 import { Dashboard } from "./components/MainArea/dashboard.jsx";
 import { ChatArea } from "./components/MainArea/chat/chatarea.jsx";
 import { Mainarea } from "./components/MainArea/mainarea.jsx";
+import { VidCallLayout } from "./components/webRtc/rtcCalling.jsx";
 
 const router = createBrowserRouter([
   {
@@ -24,13 +25,24 @@ const router = createBrowserRouter([
         element:< Mainarea/>,
         children:[
           {
-            path:'dashboard',
+            path:'@me',
             element:<Dashboard/>,
+            children: [
+              /* {
+                path: ":chatid",
+                element: <ChatArea/>, // Profile component for different profiles
+              }, */
+            ],
           },
           {
-            path:'chat',
+            path:'@me/:chatid',
             element:<ChatArea/>,
           },
+          {
+            path:'@me/vidcall',
+            element:<VidCallLayout/>,
+            
+          }
         ]
       }
     ]

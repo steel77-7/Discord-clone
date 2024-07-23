@@ -64,7 +64,7 @@ const ChatNavRoutes = () => {
   return (
     <div className="flex cahtnavroutes text-slate-300">
       <ul className="flex flex-col m-3 text-xl flex-grow">
-      <Link to={'dashboard'}> <li className="hover:bg-slate-400 p-2 rounded-md">Friends</li></Link>
+      <Link to={'@me'}> <li className="hover:bg-slate-400 p-2 rounded-md">Friends</li></Link>
         <li className="hover:bg-slate-400 p-2 rounded-md">Nitro</li>
         <li className="hover:bg-slate-400 p-2 rounded-md">Shop</li>
       </ul>
@@ -122,7 +122,7 @@ const SingleDirectMessageComponent = ({ user, contact }) => {
   if(!contact) return null
   return (
     <>
-    <Link to ={'chat'}>
+    <Link to ={`@me/${contact._id}`}>
     <div className="flex  gap-4 p-2 hover:bg-slate-400 m-1 rounded-md">
       <img
         src=""

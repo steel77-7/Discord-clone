@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setServerInfo,resetServerInfo } from "../../redux/reducer/serverReducer";
 import ServerCreationForm from "../Server_components/serverCreationForm";
 import { setCurrentChat,resetCurrrentChat } from "../../redux/reducer/currentChatReducer";
+import { Link } from "react-router-dom";
 export const ServerNavbar = ({
   setServerCreationPress,
   serverCreationPress,
@@ -48,9 +49,11 @@ export const ServerNavbar = ({
   return (
     <>
       <div className="flex flex-col items-center bg-slate-800 h-full w-w-serverNav">
+        <Link to={'@me'}>
         <button className="flex justify-center items-center text-white h-14 w-14 m-2 rounded-full bg-slate-400" onClick={handleHomePress}>
           home
         </button>
+        </Link>
         {serverList.length > 0 &&
           serverList.map((server, index) => (
             <button

@@ -51,13 +51,13 @@ router.post("/createServer", authenticator, async (req, res) => {
   }
 });
 //curretnly bruteforcing ******to be optomised later
-router.get("/chatList", authenticator, async (req, res) => {
-  //console.log('guild chats')
-  const serverid = req.headers.serverid;
+router.get("/chatList/:serverid", authenticator, async (req, res) => {
+  const serverid = req.params.serverid;
+  console.log('server id',serverid)
   try {
     const chats = await Chat.find({ server: serverid });
     if (chats) {
-      //console.log('serverchats:',chats)
+      console.log('serverchats:',chats)
       return res.status(200).json({ chats });
     }
   } catch (error) {

@@ -9,20 +9,20 @@ const url = import.meta.env.VITE_SERVER_API;
 export const ServerChatNavStructure = () => {
   const user = useSelector((state) => state.user);
   const serverInfo = useSelector((state) => state.serverInfo);
-  console.log("server info :", serverInfo);
-  const serverDispatch = useDispatch();
+  //console.log("server info :", serverInfo);
+  
   const [addDmPress, setAddDmPress] = useState(false);
   const [dmList, setDmList] = useState([]);
 
   useEffect(() => {
     const fetchDmList = async () => {
       try {
-        const response = await fetch(url + `/guild/chatList/:${serverInfo._id}`, {
+        const response = await fetch(url + `/guild/chatList/${serverInfo._id}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("authtoken")}`,
-            ServerId: `${serverInfo._id}`,
+            
           },
         });
 
@@ -63,7 +63,7 @@ export const ServerChatNavStructure = () => {
   );
 };
 
-const ServerChats = ({ user, setAddDmPress, addDmPress, dmList }) => {
+const ServerChats = ({ user, setAddDmPress, addDmPress, dmList,serverInfo }) => {
   const currentChat = useSelector((state) => state.currentChat);
   const dispatch = useDispatch();
   const [channelCreationPress, setChannelCreationPress] = useState(false);
@@ -88,13 +88,13 @@ const ServerChats = ({ user, setAddDmPress, addDmPress, dmList }) => {
           dmList.map((contact, index) => {
             return (
               <button onClick={() => dispatch(setCurrentChat(contact))}>
-                <Link to={"chat"}>
+                {/* <Link to={`${serverInfo}/`}> */}
                   <SingleDirectMessageComponent
                     key={index}
                     contact={contact}
                     user={user}
                   />
-                </Link>
+                {/* </Link> */}
               </button>
             );
           })

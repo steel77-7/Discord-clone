@@ -3,6 +3,7 @@ import { MessageComponent } from "./messagecomponent";
 import { useSelector } from "react-redux";
 import getSocket from "../../../misc/getSocket";
 import { toast } from "sonner";
+import { Link } from "react-router-dom";
 export const ChatArea = () => {
   const currentChat = useSelector((state) => state.currentChat);
   const user = useSelector((state) => state.user);
@@ -168,7 +169,7 @@ const MessageNav = ({ currentChat, user }) => {
         <div className="flex">
           <ul className=" w-full flex gap-10 px-4">
             <li>create group</li>
-            <li>video call</li>
+   <Link to={'vid/:vidcall'}><li>video call</li></Link>         
             <li>audio call</li>
           </ul>
         </div>

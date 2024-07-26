@@ -123,6 +123,7 @@ const SingleDirectMessageComponent = ({ user, contact }) => {
   return (
     <>
     <Link to ={`@me/${contact._id}`}>
+    {/* <Link to ={`chat`}> */}
     <div className="flex  gap-4 p-2 hover:bg-slate-400 m-1 rounded-md">
       <img
         src=""

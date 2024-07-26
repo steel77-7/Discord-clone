@@ -65,7 +65,7 @@ export const Dashboard = () => {
 
   return (
     <>
-    <Outlet/>
+    
       <div className="nav flex flex-col bg-gray-600  w-full  h-full text-white ">
         <div className="flex-1">
           <FriendNav

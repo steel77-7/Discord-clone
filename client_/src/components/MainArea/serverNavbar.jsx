@@ -33,7 +33,7 @@ export const ServerNavbar = ({
 
       if (response.ok) {
         const data = await response.json();
-        console.log("server list", data);
+        //console.log("server list", data);
         setServerList(data.servers);
       }
     } catch (error) {
@@ -56,19 +56,13 @@ export const ServerNavbar = ({
         </Link>
         {serverList.length > 0 &&
           serverList.map((server, index) => (
-            <button
-              key={index}
-              onClick={() => {
-                console.log("Dispatching server info:", server); // Debugging line
-                dispatch(setServerInfo(server));
-              }}
-            >
-              <ServerNavbarIcons
+            
+             ( <ServerNavbarIcons
                 server={server}
                 key={index}
                 dispatch={dispatch}
-              />
-            </button>
+              />)
+           
           ))}
 
         <button
@@ -88,10 +82,11 @@ export const ServerNavbar = ({
 const ServerNavbarIcons = ({ server, dispatch }) => {
  
   const handleClick = async()=>{
-    console.log("server in the payload:", server);
+    //console.log("server in the payload:", server);
     await dispatch(setServerInfo(server));
   }
   return (
+    <Link to={`${server._id}`}>
     <div className="relative flex group">
       <button
         className="flex bg-white h-14 w-14 rounded-full transition-all hover:rounded-xl ease-in-out m-4"
@@ -103,5 +98,6 @@ const ServerNavbarIcons = ({ server, dispatch }) => {
         {server.name}
       </div>
     </div>
+    </Link>
   );
 };

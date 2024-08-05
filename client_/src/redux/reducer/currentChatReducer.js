@@ -25,11 +25,12 @@ export const currentChatSlice = createSlice({
       state.latestMessage = latestMessage;
     },
     resetCurrrentChat:(state)=>{
-      state._id = null
-      state.members = []
-      state.isServerChat = false
-      state.name = null
-      state.createdAt = null
+      state._id = null;
+      state.members = null;
+      state.isServerChat = null;
+      state.name = null;
+      state.createdAt = null;
+      state.latestMessage = null;
     }
   },
 });

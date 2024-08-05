@@ -66,8 +66,8 @@ const router = createBrowserRouter([
             path: "@me",
             children: [
               {
-                path :'',
-                element:<Dashboard/>
+                path: "",
+                element: <Dashboard />,
               },
               {
                 path: ":chatid",
@@ -76,15 +76,13 @@ const router = createBrowserRouter([
             ],
           },
           {
-            path:':serverId/:chat',
-            element:<ChatArea />
-          }
-          
-          
-          /* {
+            path: ":serverId",
+            element: <ChatArea />,
+          },
+          {
             path: "vid",
             element: <VidCallLayout />,
-          }, */
+          },
         ],
       },
     ],
@@ -98,7 +96,6 @@ const router = createBrowserRouter([
     element: <SignIn />,
   },
 ]);
-
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

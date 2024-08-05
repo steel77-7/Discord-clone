@@ -35,6 +35,7 @@ export const ServerNavbar = ({
         const data = await response.json();
         //console.log("server list", data);
         setServerList(data.servers);
+        
       }
     } catch (error) {
       console.error(error);
@@ -84,6 +85,7 @@ const ServerNavbarIcons = ({ server, dispatch }) => {
   const handleClick = async()=>{
     //console.log("server in the payload:", server);
     await dispatch(setServerInfo(server));
+    dispatch(resetCurrrentChat());
   }
   return (
     <Link to={`${server._id}`}>

@@ -1,4 +1,4 @@
-import React from 'react';
+/* import React from 'react';
 import {playVideoFromCamera} from "../webRtc/logic"
 export const StreamContainer = () => {
    playVideoFromCamera();
@@ -10,3 +10,4 @@ export const StreamContainer = () => {
     </>
   )
 }
+ */

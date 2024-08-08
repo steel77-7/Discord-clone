@@ -10,7 +10,7 @@ import SignIn from "./components/authentication/signup.jsx";
 import { Dashboard } from "./components/MainArea/dashboard.jsx";
 import { ChatArea } from "./components/MainArea/chat/chatarea.jsx";
 import { Mainarea } from "./components/MainArea/mainarea.jsx";
-import { VidCallLayout } from "./components/webRtc/rtcCalling.jsx";
+//import { VidCallLayout } from "./components/webRtc/rtcCalling.jsx";
 
 /* const router = createBrowserRouter([
   {
@@ -79,10 +79,10 @@ const router = createBrowserRouter([
             path: ":serverId",
             element: <ChatArea />,
           },
-          {
+          /* {
             path: "vid",
             element: <VidCallLayout />,
-          },
+          }, */
         ],
       },
     ],

@@ -5,7 +5,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setUser, logoutUser } from '../../redux/reducer/userReducer';
 
 const Register = () => {
-
+  const [imageUrl, setImageUrl] = useState(null);
+  const [uploading, setUploading] = useState(false);
   const user = useSelector((state)=>state.user);
   const userDispatch = useDispatch()
   const [email, setEmail] = useState("");
@@ -39,10 +40,39 @@ const Register = () => {
     } catch (error) {
        console.log(error)
     }
-
-    
   };
 
+  const uploadPic = async (file) => {
+    try {
+      setUploading(true);
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'dsicord images'); 
+      formData.append('cloud_name', 'dtmqwo4sq'); 
+
+      const response = await fetch(
+        'https://api.cloudinary.com/v1_1/dtmqwo4sq/image/upload', // Replace with your Cloudinary cloud name
+        {
+          method: 'POST',
+          body: formData,
+        }
+      );
+
+      const data = await response.json();
+      setImageUrl(data.secure_url);
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    } finally {
+      setUploading(false);
+    }
+  };
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      uploadPic(file);
+    }
+  };
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center">
       <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-96">

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MessageComponent } from "./messagecomponent";
 import { useSelector } from "react-redux";
 import getSocket from "../../../misc/getSocket";
@@ -40,7 +40,35 @@ export const ChatArea = () => {
       socket.off("recieve-message", onReceiveMessage);
     };
   }, [socket]);
+  /* 
+  useEffect(() => {
+    function onConnect() {
+      setIsConnected(true);
+    }
+    function onDisconnect() {
+      setIsConnected(false);
+    }
 
+    function onReceiveMessage (message){
+      console.log("message recieved", message);
+      console.log(user);
+      setMessages((prev) => [...prev, message]);
+    }
+    socket.current.on("connect", () => {
+      onConnect();
+    });
+    socket.current.on("disconnect", onDisconnect);
+
+    // Ensure this listener is only added once
+    socket.current.on("recieve-message", onReceiveMessage);
+
+    return () => {
+      socket.current.off("connect", onConnect);
+      socket.current.off("disconnect", onDisconnect);
+      socket.current.off("recieve-message", onReceiveMessage);
+    };
+  }, [socket.current]);
+ */
   useEffect(() => {
     fetchMessages();
     console.log("messages: ", messages);

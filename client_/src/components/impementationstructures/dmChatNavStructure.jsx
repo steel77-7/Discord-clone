@@ -136,7 +136,9 @@ const SingleDirectMessageComponent = ({ user, contact }) => {
         if(contact[0].name!==null) return contact.name
       })} */}
       <div className="flex flex-col items-start">
-      {contact.name || contact.members[0].name}
+
+      {contact?.name || contact?.members[0].name}
+      
       {contact.latestMessage!==null?<p className="text-xs">{contact.latestMessage.message}</p>:<p className="text-s">no new messages</p>}
 
       </div>

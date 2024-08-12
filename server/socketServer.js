@@ -5,7 +5,7 @@ const socketConnection = (httpServer) => {
   const io = new Server(httpServer, {
     cors: {
       origin: "*",
-      methods: ["GET", "POST"],
+      methods: ["GET", "POST","PATCH"],
     },
   });
 
@@ -15,11 +15,14 @@ const socketConnection = (httpServer) => {
     socket.on("join-room", (room) => {
       socket.join(room);
       console.log(`Joined room: ${room}`);
+      console.log(`Roooms: `,socket.rooms);
     });
 
     socket.on("send-message", (message) => {
       console.log("Received direct message:", message);
-      socket.to(message.chat._id).emit("recieve-message", message);
+      console.log("rooms:", socket.rooms);
+      //socket.to(message.chat._id).emit("recieve-message", message);
+      socket.to(message.chat).emit("recieve-message", message);
     });
     //signalling webrtc
     socket.on("call-request", (room) => {

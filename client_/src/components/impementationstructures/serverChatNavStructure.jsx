@@ -4,13 +4,14 @@ import { setCurrentChat } from "../../redux/reducer/currentChatReducer";
 import { setServerInfo } from "../../redux/reducer/serverReducer";
 import { ChannelCreationForm } from "../Server_components/channelCreationForm";
 import { Link } from "react-router-dom";
+import ServerDropDownMenue from "../Server_components/serverDropDownMenue";
 const url = import.meta.env.VITE_SERVER_API;
 
 export const ServerChatNavStructure = () => {
   const user = useSelector((state) => state.user);
   const serverInfo = useSelector((state) => state.serverInfo);
   //console.log("server info :", serverInfo);
-  
+  const[showMenu,setShowMenu] = useState(false)
   const [addDmPress, setAddDmPress] = useState(false);
   const [dmList, setDmList] = useState([]);
 
@@ -39,11 +40,18 @@ export const ServerChatNavStructure = () => {
     fetchDmList();
   }, [serverInfo]);
 
+  
+
   return (
     <div className="flex h-full flex-col w-w-chatList bg-slate-700 left-20 text-slate-300">
-      <div className="flex relative  py-2 items-center flex-col border-b border-solid border-slate-900 ">
+      <button onClick={()=>setShowMenu(!showMenu)}>
+      <div className="flex relative  py-2 items-center justify-between p-3  border-b border-solid border-slate-900  hover:bg-slate-600 rounded-md m-1">
         {serverInfo.name && serverInfo.name}
+        <div className="flex">menu</div>
       </div>
+      </button>
+      {showMenu&&<ServerDropDownMenue/>}
+      
 
       <ServerChats
         user={user}

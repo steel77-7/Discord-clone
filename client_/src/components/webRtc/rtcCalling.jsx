@@ -1,4 +1,4 @@
-import React, { useRef, useState,useEffect } from "react";
+/* import React, { useRef, useState,useEffect } from "react";
 import { StreamContainer } from "./streamContainer";
 import getSocket from "../../misc/getSocket";
 import { useSelector } from "react-redux";
@@ -26,8 +26,8 @@ export const VidCallLayout = () => {
       console.log('ice candidate added',data)
     }
 
-    function handleAnswer(){
-      
+    function handleAnswer(answer){
+      setRemoteDescription(answer);
     }
 
     socket.current.on("call-request",handleCallrequest);
@@ -78,6 +78,11 @@ export const VidCallLayout = () => {
     };
       // data channel handling
   };
+
+  //setting the remote description of the peerconnection
+ async function setRemoteDescription(answer){
+  peerRef.current.setRemoteDescription(new RTCSessionDescription(answer))
+ }
 
 
 //for handling remote feed
@@ -149,3 +154,4 @@ const CallControls = () => {
     </>
   );
 };
+ */

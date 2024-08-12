@@ -1,22 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  _id: null,
-  name: null,
-  email: null,
-  createdAt: null,
+      _id : null,
+      name :null,
+      email : null,
+      createdAt : null,
+      friends : null,
+      friendRequests: null,
+      img :null
 };
 
-/* const initialState = {
-    value:1
-  } */
 
 export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
     setUser: (state, action) => {
-      const { _id, name, email, createdAt,friendRequests,friends } = action.payload;
+      const { _id, name, email, createdAt,friendRequests,img,friends } = action.payload;
       console.log("payload : ", action,state)
       state._id = _id;
       state.name = name;
@@ -24,15 +24,18 @@ export const userSlice = createSlice({
       state.createdAt = createdAt;
       state.friends = friends;
       state.friendRequests = friendRequests;
-    }
-    /* setUser: (state, action) => {
-        state.value += 2;
-    } */,
+      state.img = img;
+    },
+   
     logoutUser: (state) => {
-      state._id = null;
-      state.name = null;
+      
+      state._id = null
+      state.name = null
       state.email = null;
       state.createdAt = null;
+      state.friends = null;
+      state.friendRequests = null;
+      state.img = null;
     },
   },
 });

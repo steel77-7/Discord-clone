@@ -39,7 +39,7 @@ router.post("/saveMessage", authenticator, async (req, res) => {
       { new: true }
     );
     if (populatedMessage) {
-      console.log(populatedMessage);
+      //console.log(populatedMessage);
       res.status(200).json({ message: "message saved" ,latestMessage:populatedMessage});
     } else {
       res.status(500).json({ message: "database error" });
@@ -53,7 +53,7 @@ router.post("/saveMessage", authenticator, async (req, res) => {
 router.patch("/editMessage/:messageid", authenticator, async (req, res) => {
   try {
     const mess_id = req.params.messageid;
-    console.log("patch inititated",req.body)
+    //console.log("patch inititated",req.body)
     const { message } = req.body;
     const result = await Message.findByIdAndUpdate(
       mess_id,
@@ -61,7 +61,7 @@ router.patch("/editMessage/:messageid", authenticator, async (req, res) => {
       {new:true}
     );
 
-    console.log("Message update results :", result);
+    //console.log("Message update results :", result);
     res.send({ message: "message updated ",result });
   } catch (error) {
     console.error(error);
@@ -72,9 +72,9 @@ router.delete("/deleteMessage/:messageid", authenticator, async (req, res) => {
   try {
     console.log("delete message initiated");
     const mess_id = req.params.messageid;
-    console.log("message is :", mess_id);
+    //console.log("message is :", mess_id);
     const result = await Message.findByIdAndDelete(mess_id);
-    console.log("Message deletion results :", result);
+    //console.log("Message deletion results :", result);
     res.send({ message: "message deleted " ,result});
   } catch (error) {
     console.error(error);

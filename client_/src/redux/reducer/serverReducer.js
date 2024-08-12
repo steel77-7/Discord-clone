@@ -4,7 +4,8 @@ const initialState = {
   _id: null,
   name: null,
   members: [],
-  invites:[]
+  invites:[],
+  url:''
 };
 
 export const serverSlice = createSlice({
@@ -13,17 +14,19 @@ export const serverSlice = createSlice({
   reducers: {
     setServerInfo: (state, action) => {
       console.log(action)
-      const { _id, name, members ,invites} = action.payload;
+      const { _id, name, members ,invites,url} = action.payload;
       state._id = _id;
       state.name = name;
       state.members = members;
-      state.invites = invites
+      state.invites = invites;
+      state.url = url;
     },
     resetServerInfo: (state) => {
       state._id = null;
       state.name = null;
       state.members = [];
       state.invites = [];
+      state.url = '';
     },
   },
 });

@@ -31,7 +31,7 @@ function Login() {
         localStorage.setItem('authtoken', data.authtoken);
        
         userDispatch(setUser(data.userObject))
-        console.log("user is : " ,user )
+        console.log("user is : " ,data )
         navigate('/app');
       } else {
         
